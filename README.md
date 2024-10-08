@@ -11,6 +11,6 @@
 - run locally
 
 ```bash
-pip install natal streamlit
-streamlit run 00\ Natal\ Chart.py
+pip install natal streamlit streamlit-shortcuts libsass
+streamlit run main.py
 ```
