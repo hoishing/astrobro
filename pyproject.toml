@@ -12,15 +12,16 @@ homepage = "https://astrobro.streamlit.app"
 python = "^3.12"
 natal = "*"
 streamlit = "*"
-watchdog = "*"
-libsass = "*"
 streamlit-shortcuts = "*"
+libsass = "*"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
 natal = { path = "../natal", develop = true }
+watchdog = "*"
+pytest = "*"
 
 
 [build-system]

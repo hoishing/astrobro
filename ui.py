@@ -73,7 +73,7 @@ def data_form(
             key=f"{id}_city_box",
             help="type to search",
         )
-        
+
         return sess[name_key], sess[city_key]
 
 
@@ -118,17 +118,19 @@ def date_adjustment(id: str):
         )
 
 
-def chart_ui(chart: Chart):
+def chart_ui(data1: Data, data2: Data = None):
+    chart = Chart(data1=data1, data2=data2, width=CHART_WIDTH, config=sess.config)
     st.write("")
     st.image(chart.svg)
 
 
-def stats_ui(stats: Stats):
+def stats_ui(data1: Data, data2: Data = None):
     # TODO: compile to css and save to static folder
     css = sass.compile(filename="style.scss")
     style = f"<style>{css}</style>"
     st.markdown(style, unsafe_allow_html=True)
-    st.html(stats.full_report("html"))
+    stats = Stats(data1=data1, data2=data2)
+    st.markdown(stats.full_report("html"), unsafe_allow_html=True)
     st.write("")
 
 
@@ -159,10 +161,6 @@ def adjust_date(id: str, unit: AdjUnit, shift: Literal[1, -1]):
         dt += delta
 
     sess[f"{id}_dt"] = dt
-
-
-def chart_obj(data1: Data, data2: Data = None):
-    return Chart(data1=data1, data2=data2, width=CHART_WIDTH, config=sess.config)
 
 
 def data_obj(name: str, city: str, id: str):
