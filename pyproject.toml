@@ -20,7 +20,6 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 # natal = { path = "../natal", develop = true }
-watchdog = "*"
 pytest = "*"
 
 

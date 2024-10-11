@@ -1,0 +1,4 @@
+natal
+streamlit
+streamlit-shortcuts
+libsass
