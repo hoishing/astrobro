@@ -1,18 +1,14 @@
-import streamlit as st
-from natal import Stats
 from ui import (
     chart_ui,
     data_form,
     data_obj,
     date_adjustment,
     options_ui,
-    sess,
     stats_ui,
 )
 
 # data_from id
 id = "birth"
-
 options_ui()
 
 "##### Birth Chart"

@@ -5,6 +5,7 @@ from natal import Chart, Config, Data, HouseSys, Stats, ThemeType
 from typing import Literal
 from streamlit_shortcuts import button
 from natal import Chart, Data, Stats
+from natal.config import Orb
 
 sess = st.session_state
 
@@ -28,7 +29,6 @@ page_config = dict(
 CITY_ASCII = Data.cities.iloc[:, 1]
 
 AdjUnit = Literal["year", "month", "week", "day", "hour", "minute"]
-
 
 # def city_info(city: str):
 #     return Data.cities[Data.cities["ascii_name"] == city].iloc[0]
@@ -56,14 +56,20 @@ def data_form(
         c1, c2, c3 = st.columns(3)
         date = c1.date_input(
             "Date",
-            value="today" if transit else dt,
+            value=sess.get(dt_key, "today") if transit else dt,
             max_value=datetime(2300, 1, 1),
             min_value=datetime(1800, 1, 1),
             format="YYYY-MM-DD",
             key=f"{id}_date_box",
         )
         hr = c2.selectbox("Hour (24)", range(24), index=dt.hour, key=f"{id}_hr_box")
-        min = c3.selectbox("Minute", range(60), index=dt.minute, key=f"{id}_min_box")
+        min = c3.selectbox(
+            "Minute",
+            range(60),
+            index=dt.minute,
+            key=f"{id}_min_box",
+            help="daylight saving time handled automatically",
+        )
 
         sess[dt_key] = datetime(date.year, date.month, date.day, hr, min)
         sess[city_key] = st.selectbox(
@@ -78,26 +84,42 @@ def data_form(
 
 
 def options_ui():
+    config = Config()
+    orbs: Orb = sess.get("orbs", config.orb)
+
     with st.sidebar:
-        with st.expander("Settings"):
-            sys_name = st.selectbox(
-                "House System",
-                HouseSys._member_names_,
-                index=sess.get("hse_sys_idx", 0),
-                key="house_sys",
+        sys_name = st.selectbox(
+            "House System",
+            HouseSys._member_names_,
+            index=sess.get("hse_sys_idx", 0),
+            key="house_sys",
+        )
+        theme = st.selectbox(
+            "Theme",
+            ThemeType.__args__,
+            index=sess.get("theme_idx", 0),
+            key="theme",
             )
-            theme = st.selectbox(
-                "Theme",
-                ThemeType.__args__,
-                index=sess.get("theme_idx", 0),
-                key="theme",
-            )
+        with st.expander("Orbs"):
+            conjunction = st.number_input("conjunction", value=orbs.conjunction)
+            opposition = st.number_input("opposition", value=orbs.opposition)
+            trine = st.number_input("trine", value=orbs.trine)
+            square = st.number_input("square", value=orbs.square)
+            sextile = st.number_input("sextile", value=orbs.sextile)
+
         st.markdown(SOURCE_CODE)
 
     sess["theme_idx"] = ThemeType.__args__.index(theme)
     sess["hse_sys_idx"] = HouseSys._member_names_.index(sys_name)
     sess["config"] = Config(theme_type=theme)
     sess["hse_sys"] = HouseSys[sys_name]
+    sess["orbs"] = Orb(
+        conjunction=conjunction,
+        opposition=opposition,
+        trine=trine,
+        square=square,
+        sextile=sextile,
+    )
 
 
 def date_adjustment(id: str):
@@ -110,11 +132,11 @@ def date_adjustment(id: str):
     )
     with c1:
         button(
-            "❮", "alt+arrowleft", on_click=adjust_date, args=(id, unit, -1), key="prev"
+            "❮", "alt+arrowleft", on_click=adjust_date, args=(id, unit, -1), key=f"prev"
         )
     with c3:
         button(
-            "❯", "alt+arrowright", on_click=adjust_date, args=(id, unit, 1), key="next"
+            "❯", "alt+arrowright", on_click=adjust_date, args=(id, unit, 1), key=f"next"
         )
 
 

@@ -79,8 +79,8 @@ $dark-bg-color: #262730;
 
 .st-key-prev > div {
     display: flex;
-    justify-content: right;
-    align-items: right;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 [data-testid="stColumn"] {
