@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "astrobro"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Kelvin Ng <hoishing@gmail.com>"]
 readme = "README.md"
@@ -19,7 +19,7 @@ libsass = "*"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-natal = { path = "../natal", develop = true }
+# natal = { path = "../natal", develop = true }
 pytest = "*"
 
 

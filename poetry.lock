@@ -489,25 +489,23 @@ pyarrow = ["pyarrow (>=11.0.0)"]
 
 [[package]]
 name = "natal"
-version = "0.3.4"
+version = "0.3.5"
 description = "create Natal Chart with ease"
 optional = false
-python-versions = "^3.12"
-files = []
-develop = true
+python-versions = "<4.0,>=3.12"
+files = [
+    {file = "natal-0.3.5-py3-none-any.whl", hash = "sha256:0a3df9f2ffb1917a51a22a312c116a0af401b6e1d32a3b25b1f7d754304eca03"},
+    {file = "natal-0.3.5.tar.gz", hash = "sha256:ca2cf14e91dab905a261ebb54cf46ad53098b62f77443281ab2d2a59a7124e22"},
+]
 
 [package.dependencies]
-darkdetect = "^0.8.0"
-pandas = "^2.2.2"
-pydantic = "^2.8.2"
-pyswisseph = "^2.10.3.2"
-pyyaml = "^6.0.2"
-tabulate = "^0.9.0"
-tagit = "^0.6.1"
-
-[package.source]
-type = "directory"
-url = "../natal"
+darkdetect = ">=0.8.0,<0.9.0"
+pandas = ">=2.2.2,<3.0.0"
+pydantic = ">=2.8.2,<3.0.0"
+pyswisseph = ">=2.10.3.2,<3.0.0.0"
+pyyaml = ">=6.0.2,<7.0.0"
+tabulate = ">=0.9.0,<0.10.0"
+tagit = ">=0.6.1,<0.7.0"
 
 [[package]]
 name = "numpy"
@@ -1557,4 +1555,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "083d49e94bdfdca8b7a8e7315556d7a371aca405759fb0b1b32b8f17f588e2ec"
+content-hash = "42e2ae8d97682a3b0b7d71693b16800f5157928fce6bbed2a3076e289da70080"
