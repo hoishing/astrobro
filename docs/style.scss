@@ -1,0 +1,89 @@
+// Define variables for common values
+$dark-border-color: #3e4044;
+$light-border-color: #d6d6d8;
+$border-radius: 6px;
+$light-bg-color: #f0f2f6;
+$dark-bg-color: #262730;
+
+.tabulate {
+    font-size: 1rem;
+
+    h4 {
+        font-size: 1.2rem;
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: $border-radius;
+        overflow: hidden;
+        border: 0.5px solid $light-border-color;
+        text-align: center;
+    }
+
+    th {
+        background-color: $light-bg-color;
+        font-weight: normal;
+    }
+    td,
+    th {
+        border: 0.5px solid $light-border-color;
+        padding: 0.3rem;
+    }
+
+    tr {
+        &:first-child {
+            th:first-child {
+                border-top-left-radius: $border-radius;
+            }
+            th:last-child {
+                border-top-right-radius: $border-radius;
+            }
+        }
+
+        &:last-child {
+            td:first-child {
+                border-bottom-left-radius: $border-radius;
+            }
+            td:last-child {
+                border-bottom-right-radius: $border-radius;
+            }
+        }
+
+        &:nth-child(even) {
+            background-color: $light-bg-color;
+        }
+    }
+
+    &.cross_ref table {
+        table-layout: fixed;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        tr:nth-child(even),
+        th {
+            background-color: $dark-bg-color;
+        }
+        td,
+        th {
+            border-color: $dark-border-color;
+        }
+        table {
+            border-color: $dark-border-color;
+        }
+    }
+}
+
+.st-key-prev > div {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+[data-testid="stColumn"] {
+    flex: 1 1 30%;
+    min-width: 30%;
+}
