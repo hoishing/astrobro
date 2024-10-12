@@ -42,25 +42,25 @@ def test_default_date(transit: AppTest):
 
 
 def test_sample_data(transit: AppTest, sess: SafeSessionState):
-    transit.text_input(key=name_box1).set_value("sample")
-    transit.date_input(key=date_box1).set_value(date(1976, 4, 20))
-    transit.selectbox(key=hr_box1).set_value(18)
-    transit.selectbox(key=min_box1).set_value(58)
-    transit.selectbox(key=city_box1).set_value("Hong Kong")
 
-    transit.date_input(key=date_box2).set_value(date(2024, 4, 20))
-    transit.selectbox(key=hr_box2).set_value(18)
-    transit.selectbox(key=min_box2).set_value(58)
-    transit.selectbox(key=city_box2).set_value("Hong Kong")
+    transit.text_input(key=name_box1).set_value("sample").run()
+    transit.date_input(key=date_box1).set_value(date(1976, 4, 20)).run()
+    transit.selectbox(key=hr_box1).set_value(18).run()
+    transit.selectbox(key=min_box1).set_value(58).run()
+    transit.selectbox(key=city_box1).set_value("Hong Kong").run()
 
-    transit.run()
+    transit.date_input(key=date_box2).set_value(date(2014, 4, 20)).run()
+    transit.selectbox(key=hr_box2).set_value(18).run()
+    transit.selectbox(key=min_box2).set_value(48).run()
+    transit.selectbox(key=city_box2).set_value("Taipei").run()
+
     assert sess[name1] == "sample"
     assert sess[city1] == "Hong Kong"
     assert sess[dt1] == datetime(1976, 4, 20, 18, 58)
-    assert sess[city2] == "Hong Kong"
-    assert sess[dt2] == datetime(2024, 4, 20, 18, 58)
+    assert sess[city2] == "Taipei"
+    assert sess[min_box2] == 48
+    assert sess[dt2] == datetime(2014, 4, 20, 18, 48)
 
-
-def test_adjust_date(transit: AppTest, sess: SafeSessionState):
-    transit.button(key=f"next").click().run()
-    assert sess[dt2] == datetime(2024, 4, 21, 18, 58)
+    # press next button
+    transit.button(key="next").click().run()
+    assert sess[dt2] == datetime(2014, 4, 21, 18, 48)

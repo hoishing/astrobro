@@ -1,12 +1,5 @@
 import streamlit as st
-from ui import (
-    chart_ui,
-    data_form,
-    data_obj,
-    date_adjustment,
-    options_ui,
-    stats_ui,
-)
+from ui import chart_ui, data_form, data_obj, date_adjustment, options_ui, stats_ui
 
 id1 = "transit"
 id2 = "current"

@@ -5,7 +5,6 @@ from natal import Chart, Config, Data, HouseSys, Stats, ThemeType
 from typing import Literal
 from streamlit_shortcuts import button
 from natal import Chart, Data, Stats
-from natal.config import Orb
 
 sess = st.session_state
 
@@ -84,42 +83,47 @@ def data_form(
 
 
 def options_ui():
-    config = Config()
-    orbs: Orb = sess.get("orbs", config.orb)
+    config = sess.get("config", Config())
 
     with st.sidebar:
-        sys_name = st.selectbox(
+        st.selectbox(
             "House System",
             HouseSys._member_names_,
             index=sess.get("hse_sys_idx", 0),
-            key="house_sys",
+            on_change=lambda: sess.update(
+                hse_sys_idx=HouseSys._member_names_.index(sess.hse_sys)
+            ),
+            key="hse_sys",
         )
-        theme = st.selectbox(
+        st.selectbox(
             "Theme",
             ThemeType.__args__,
             index=sess.get("theme_idx", 0),
+            on_change=lambda: sess.update(
+                theme_idx=ThemeType.__args__.index(sess.theme)
+            ),
             key="theme",
+        )
+
+        def orb_kwarg(key: str):
+            return dict(
+                label=key,
+                min_value=1,
+                max_value=10,
+                value=sess.get(key, config.orb[key]),
+                on_change=lambda: setattr(config.orb, key, sess[key]),
+                key=key,
             )
+
         with st.expander("Orbs"):
-            conjunction = st.number_input("conjunction", value=orbs.conjunction)
-            opposition = st.number_input("opposition", value=orbs.opposition)
-            trine = st.number_input("trine", value=orbs.trine)
-            square = st.number_input("square", value=orbs.square)
-            sextile = st.number_input("sextile", value=orbs.sextile)
+            st.number_input(**orb_kwarg("conjunction"))
+            st.number_input(**orb_kwarg("opposition"))
+            st.number_input(**orb_kwarg("trine"))
+            st.number_input(**orb_kwarg("square"))
+            st.number_input(**orb_kwarg("sextile"))
 
-        st.markdown(SOURCE_CODE)
-
-    sess["theme_idx"] = ThemeType.__args__.index(theme)
-    sess["hse_sys_idx"] = HouseSys._member_names_.index(sys_name)
-    sess["config"] = Config(theme_type=theme)
-    sess["hse_sys"] = HouseSys[sys_name]
-    sess["orbs"] = Orb(
-        conjunction=conjunction,
-        opposition=opposition,
-        trine=trine,
-        square=square,
-        sextile=sextile,
-    )
+    config.theme_type = sess.theme
+    sess.config = config
 
 
 def date_adjustment(id: str):
@@ -132,11 +136,11 @@ def date_adjustment(id: str):
     )
     with c1:
         button(
-            "❮", "alt+arrowleft", on_click=adjust_date, args=(id, unit, -1), key=f"prev"
+            "❮", "alt+arrowleft", on_click=adjust_date, args=(id, unit, -1), key="prev"
         )
     with c3:
         button(
-            "❯", "alt+arrowright", on_click=adjust_date, args=(id, unit, 1), key=f"next"
+            "❯", "alt+arrowright", on_click=adjust_date, args=(id, unit, 1), key="next"
         )
 
 
@@ -186,4 +190,10 @@ def adjust_date(id: str, unit: AdjUnit, shift: Literal[1, -1]):
 
 
 def data_obj(name: str, city: str, id: str):
-    return Data(name=name, city=city, dt=sess[f"{id}_dt"], house_sys=sess.hse_sys)
+    return Data(
+        name=name,
+        city=city,
+        dt=sess[f"{id}_dt"],
+        house_sys=HouseSys[sess.hse_sys],
+        config=sess.config,
+    )

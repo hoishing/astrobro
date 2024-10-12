@@ -54,10 +54,10 @@ def test_sample_data(birth: AppTest, sess: SafeSessionState):
 
 
 def test_stats_ui(birth: AppTest, sess: SafeSessionState):
-    assert sess[name] == "shing"
-    assert 'Celestial Bodies (shing)' in birth.markdown[3].value
+    assert sess[name] == "sample"
+    assert 'Celestial Bodies (sample)' in birth.markdown[3].value
 
 def test_change_options(birth: AppTest, sess: SafeSessionState):
-    birth.selectbox(key="house_sys").select("Whole_Sign")
+    birth.selectbox(key="hse_sys").select("Whole_Sign")
     birth.run()
     assert '00°♋00' in birth.markdown[3].value

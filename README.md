@@ -36,14 +36,19 @@ streamlit run main.py
 - options
     - [x] house system
     - [x] color theme
-    - [ ] orbs
+    - [x] orbs
     - [ ] show / hide celestial bodies
     - [ ] custom theme colors
+    - [ ] save options in browser local storage
+    - [ ] separate options for different kinds of charts
 - [ ] Birth chart interpretation
 - [ ] Transit chart interpretation
 - [ ] Synastry chart interpretation
-- [ ] export chart with statistics in PDF
+- [ ] print chart and stats in PDF
 - [ ] chat with AI
+- [ ] mobile app
+- [ ] save charts in browser local storage
+- [ ] import / export charts info and settings
 
 [streamlit]: https://streamlit.io
 [stlite]: https://github.com/whitphx/stlite
