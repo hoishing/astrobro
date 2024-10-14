@@ -157,9 +157,8 @@ def chart_ui(data1: Data, data2: Data = None):
 
 
 def stats_ui(data1: Data, data2: Data = None):
-    # TODO: compile to css and save to static folder
-    css = sass.compile(filename="style.scss")
-    style = f"<style>{css}</style>"
+    with open("style.css", "r") as f:
+        style = f"<style>{f.read()}</style>"
     st.markdown(style, unsafe_allow_html=True)
     stats = Stats(data1=data1, data2=data2)
     st.markdown(stats.full_report("html"), unsafe_allow_html=True)
