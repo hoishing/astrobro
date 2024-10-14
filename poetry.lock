@@ -489,13 +489,13 @@ pyarrow = ["pyarrow (>=11.0.0)"]
 
 [[package]]
 name = "natal"
-version = "0.3.5"
+version = "0.3.6"
 description = "create Natal Chart with ease"
 optional = false
 python-versions = "<4.0,>=3.12"
 files = [
-    {file = "natal-0.3.5-py3-none-any.whl", hash = "sha256:0a3df9f2ffb1917a51a22a312c116a0af401b6e1d32a3b25b1f7d754304eca03"},
-    {file = "natal-0.3.5.tar.gz", hash = "sha256:ca2cf14e91dab905a261ebb54cf46ad53098b62f77443281ab2d2a59a7124e22"},
+    {file = "natal-0.3.6-py3-none-any.whl", hash = "sha256:cc6ec9a69fa8f452dcb7704049ce432aeabf00867d00f3d98a3ae99178a647a9"},
+    {file = "natal-0.3.6.tar.gz", hash = "sha256:04b6ba2fc64e10ca40ac7cb818fa28a1b13ba22658240eab51b1a662a804b66b"},
 ]
 
 [package.dependencies]

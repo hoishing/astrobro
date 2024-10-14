@@ -2,6 +2,7 @@ import sass
 import streamlit as st
 from datetime import datetime, timedelta
 from natal import Chart, Config, Data, HouseSys, Stats, ThemeType
+from natal.const import ASPECT_NAMES
 from typing import Literal
 from streamlit_shortcuts import button
 from natal import Chart, Data, Stats
@@ -105,22 +106,27 @@ def options_ui():
             key="theme",
         )
 
-        def orb_kwarg(key: str):
-            return dict(
+        with st.expander("Orbs"):
+            orb_kwargs = lambda key: dict(
                 label=key,
                 min_value=1,
                 max_value=10,
-                value=sess.get(key, config.orb[key]),
+                value=config.orb[key],
                 on_change=lambda: setattr(config.orb, key, sess[key]),
                 key=key,
             )
+            for aspect_name in ASPECT_NAMES:
+                st.number_input(**orb_kwargs(aspect_name))
 
-        with st.expander("Orbs"):
-            st.number_input(**orb_kwarg("conjunction"))
-            st.number_input(**orb_kwarg("opposition"))
-            st.number_input(**orb_kwarg("trine"))
-            st.number_input(**orb_kwarg("square"))
-            st.number_input(**orb_kwarg("sextile"))
+        with st.expander("Show / Hide"):
+            display_kwargs = lambda key: dict(
+                label=key,
+                value=config.display[key],
+                on_change=lambda: setattr(config.display, key, sess[f"display_{key}"]),
+                key=f"display_{key}",
+            )
+            for body in config.display.model_fields.keys():
+                st.toggle(**display_kwargs(body))
 
     config.theme_type = sess.theme
     sess.config = config
