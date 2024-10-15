@@ -10,14 +10,14 @@
     border-spacing: 0;
     border-radius: 6px;
     overflow: hidden;
-    border: 0.5px solid #d6d6d8;
+    border: 0.5px solid #3e4044;
     text-align: center; }
   .tabulate th {
-    background-color: #f0f2f6;
+    background-color: #262730;
     font-weight: normal; }
   .tabulate td,
   .tabulate th {
-    border: 0.5px solid #d6d6d8;
+    border: 0.5px solid #3e4044;
     padding: 0.3rem; }
   .tabulate tr:first-child th:first-child {
     border-top-left-radius: 6px; }
@@ -28,18 +28,10 @@
   .tabulate tr:last-child td:last-child {
     border-bottom-right-radius: 6px; }
   .tabulate tr:nth-child(even) {
-    background-color: #f0f2f6; }
+    background-color: #262730; }
   .tabulate.cross_ref table {
     table-layout: fixed; }
-  @media (prefers-color-scheme: dark) {
-    .tabulate tr:nth-child(even),
-    .tabulate th {
-      background-color: #262730; }
-    .tabulate td,
-    .tabulate th {
-      border-color: #3e4044; }
-    .tabulate table {
-      border-color: #3e4044; } }
+
 .st-key-prev > div {
   display: flex;
   justify-content: flex-end;

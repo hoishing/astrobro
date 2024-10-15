@@ -1,9 +1,7 @@
 // Define variables for common values
-$dark-border-color: #3e4044;
-$light-border-color: #d6d6d8;
+$border-color: #3e4044;
 $border-radius: 6px;
-$light-bg-color: #f0f2f6;
-$dark-bg-color: #262730;
+$bg-color: #262730;
 
 .tabulate {
     font-size: 1rem;
@@ -20,17 +18,17 @@ $dark-bg-color: #262730;
         border-spacing: 0;
         border-radius: $border-radius;
         overflow: hidden;
-        border: 0.5px solid $light-border-color;
+        border: 0.5px solid $border-color;
         text-align: center;
     }
 
     th {
-        background-color: $light-bg-color;
+        background-color: $bg-color;
         font-weight: normal;
     }
     td,
     th {
-        border: 0.5px solid $light-border-color;
+        border: 0.5px solid $border-color;
         padding: 0.3rem;
     }
 
@@ -54,26 +52,12 @@ $dark-bg-color: #262730;
         }
 
         &:nth-child(even) {
-            background-color: $light-bg-color;
+            background-color: $bg-color;
         }
     }
 
     &.cross_ref table {
         table-layout: fixed;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        tr:nth-child(even),
-        th {
-            background-color: $dark-bg-color;
-        }
-        td,
-        th {
-            border-color: $dark-border-color;
-        }
-        table {
-            border-color: $dark-border-color;
-        }
     }
 }
 
