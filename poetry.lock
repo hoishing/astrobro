@@ -226,20 +226,6 @@ files = [
 ]
 
 [[package]]
-name = "darkdetect"
-version = "0.8.0"
-description = "Detect OS Dark Mode from Python"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "darkdetect-0.8.0-py3-none-any.whl", hash = "sha256:a7509ccf517eaad92b31c214f593dbcf138ea8a43b2935406bbd565e15527a85"},
-    {file = "darkdetect-0.8.0.tar.gz", hash = "sha256:b5428e1170263eb5dea44c25dc3895edd75e6f52300986353cd63533fe7df8b1"},
-]
-
-[package.extras]
-macos-listener = ["pyobjc-framework-Cocoa"]
-
-[[package]]
 name = "gitdb"
 version = "4.0.11"
 description = "Git Object Database"
@@ -489,17 +475,16 @@ pyarrow = ["pyarrow (>=11.0.0)"]
 
 [[package]]
 name = "natal"
-version = "0.3.6"
+version = "0.3.8"
 description = "create Natal Chart with ease"
 optional = false
 python-versions = "<4.0,>=3.12"
 files = [
-    {file = "natal-0.3.6-py3-none-any.whl", hash = "sha256:cc6ec9a69fa8f452dcb7704049ce432aeabf00867d00f3d98a3ae99178a647a9"},
-    {file = "natal-0.3.6.tar.gz", hash = "sha256:04b6ba2fc64e10ca40ac7cb818fa28a1b13ba22658240eab51b1a662a804b66b"},
+    {file = "natal-0.3.8-py3-none-any.whl", hash = "sha256:a41e37fca93e3445e01e3f2add280389f20f49e027b9da510709a4d11179142b"},
+    {file = "natal-0.3.8.tar.gz", hash = "sha256:230d7ed59eeb46be818648c30c6ee7da8fb4bb3678562d7cb16e509682074c59"},
 ]
 
 [package.dependencies]
-darkdetect = ">=0.8.0,<0.9.0"
 pandas = ">=2.2.2,<3.0.0"
 pydantic = ">=2.8.2,<3.0.0"
 pyswisseph = ">=2.10.3.2,<3.0.0.0"

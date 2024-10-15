@@ -1,4 +1,3 @@
-import sass
 import streamlit as st
 from datetime import datetime, timedelta
 from natal import Chart, Config, Data, HouseSys, Stats, ThemeType
@@ -97,9 +96,9 @@ def options_ui():
             key="hse_sys",
         )
         st.selectbox(
-            "Theme",
+            "Chart Theme",
             ThemeType.__args__,
-            index=sess.get("theme_idx", 0),
+            index=sess.get("theme_idx", 1),
             on_change=lambda: sess.update(
                 theme_idx=ThemeType.__args__.index(sess.theme)
             ),
