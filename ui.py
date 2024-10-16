@@ -150,7 +150,7 @@ def date_adjustment(id: str):
 
 
 def chart_ui(data1: Data, data2: Data = None):
-    chart = Chart(data1=data1, data2=data2, width=CHART_WIDTH, config=sess.config)
+    chart = Chart(data1=data1, data2=data2, width=CHART_WIDTH)
     st.write("")
     st.image(chart.svg)
 
