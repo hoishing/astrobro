@@ -10,7 +10,7 @@ homepage = "https://astrobro.streamlit.app"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-natal = "*"
+natal = "0.3.8"
 streamlit = "*"
 streamlit-shortcuts = "*"
 
