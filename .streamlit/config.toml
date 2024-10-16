@@ -3,3 +3,6 @@ enableStaticServing = true
 
 [theme]
 base = "dark"
+
+[browser]
+gatherUsageStats = false
