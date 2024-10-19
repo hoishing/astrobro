@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "astrobro"
-version = "0.2.3"
+version = "0.3.0"
 description = ""
 authors = ["Kelvin Ng <hoishing@gmail.com>"]
 readme = "README.md"
@@ -10,7 +10,7 @@ homepage = "https://astrobro.streamlit.app"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-natal = "0.3.8"
+# natal = "0.3.8"
 streamlit = "*"
 streamlit-shortcuts = "*"
 
@@ -18,7 +18,7 @@ streamlit-shortcuts = "*"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-# natal = { path = "../natal", develop = true }
+natal = { path = "../natal", develop = true }
 pytest = "*"
 libsass = "*"
 

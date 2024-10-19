@@ -1,18 +1,42 @@
 import streamlit as st
-from ui import page_config
-
-
-birth = st.Page("birth.py", title="Birth Chart", icon=":material/person:")
-transit = st.Page("transit.py", title="Transit", icon=":material/arrow_range:")
-synastry = st.Page("synastry.py", title="Synastry", icon=":material/group:")
-
-pg = st.navigation([birth, transit, synastry])
-st.set_page_config(**page_config)
-st.logo(image="static/astrobro-logo.png")
-st.html(
-    """<style>
-        #MainMenu {display: none;}
-        footer {display: none;}
-        </style>"""
+from datetime import date
+from const import PAGE_CONFIG, STYLE, LOGO
+from ui import (
+    chart_ui,
+    data_form,
+    data_obj,
+    date_adjustment,
+    display_ui,
+    options_ui,
+    orb_ui,
+    stats_ui,
 )
-pg.run()
+
+st.set_page_config(**PAGE_CONFIG)
+st.logo(LOGO)
+st.markdown(STYLE, unsafe_allow_html=True)
+
+id1 = "d1"
+id2 = "d2"
+
+with st.sidebar:
+    options_ui()
+    with st.expander("Orbs"):
+        orb_ui()
+    with st.expander("Birth Data Entities"):
+        display_ui(1)
+    with st.expander("Transit / Synastry Entities"):
+        display_ui(2)
+
+
+with st.expander("Birth Data", expanded=True):
+    name1, city1 = data_form(id1, "", date(2000, 1, 1))
+
+with st.expander("Transit / Synastry"):
+    name2, city2 = data_form(id2, "Current", date.today())
+
+if name1 and city1:
+    data1, data2 = data_obj(name1, city1, id1, name2, city2, id2)
+    chart_ui(data1, data2)
+    date_adjustment(id2 or id1)
+    stats_ui(data1, data2)

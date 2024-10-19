@@ -456,13 +456,13 @@ files = [
 
 [[package]]
 name = "narwhals"
-version = "1.9.3"
+version = "1.9.4"
 description = "Extremely lightweight compatibility layer between dataframe libraries"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "narwhals-1.9.3-py3-none-any.whl", hash = "sha256:598d09227bef31f42ec25840728f3113e7e37c30d5430ae8126a1c8bd58177f9"},
-    {file = "narwhals-1.9.3.tar.gz", hash = "sha256:5b3f52c02a86730a611497e6ffbaccaa3df86fc26470c23e3fb40dc2bc793ebb"},
+    {file = "narwhals-1.9.4-py3-none-any.whl", hash = "sha256:cdd16f73268a3f0d3327aa9e4c6ab25a0b277629d6710bef58e86f40e57e5cc9"},
+    {file = "narwhals-1.9.4.tar.gz", hash = "sha256:5de1f2d7bfbe555573d945fe1d760469a05784f3e69b7bc1b5b1303aae7946a1"},
 ]
 
 [package.extras]
@@ -475,21 +475,23 @@ pyarrow = ["pyarrow (>=11.0.0)"]
 
 [[package]]
 name = "natal"
-version = "0.3.9"
+version = "0.4.0"
 description = "create Natal Chart with ease"
 optional = false
-python-versions = "<4.0,>=3.12"
-files = [
-    {file = "natal-0.3.9-py3-none-any.whl", hash = "sha256:6eed2395a1f75537f2a4b22d939e5d731eb998909dbd93a3324b5689adb665c5"},
-    {file = "natal-0.3.9.tar.gz", hash = "sha256:e9ec793f3ee1ac3201d137ff45cce3014a83af8d5fda2c1d593649b31d053a95"},
-]
+python-versions = "^3.12"
+files = []
+develop = true
 
 [package.dependencies]
-pandas = ">=2.2.2,<3.0.0"
-pydantic = ">=2.8.2,<3.0.0"
-pyswisseph = ">=2.10.3.2,<3.0.0.0"
-tabulate = ">=0.9.0,<0.10.0"
-tagit = ">=0.6.1,<0.7.0"
+pandas = "^2.2.2"
+pydantic = "^2.8.2"
+pyswisseph = "^2.10.3.2"
+tabulate = "^0.9.0"
+tagit = "^0.6.1"
+
+[package.source]
+type = "directory"
+url = "../natal"
 
 [[package]]
 name = "numpy"
@@ -1477,4 +1479,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "0f2550a5ac2cc4fa45b905d5355c72eac37ab0f89f38803a73fa05b5566bac4b"
+content-hash = "05f76c9c036ef58f589976caafe29e3892c08a3a266eca2c65afeef672013637"
