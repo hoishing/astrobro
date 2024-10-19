@@ -1,6 +1,6 @@
 import streamlit as st
 from const import BODIES, CITY_ASCII
-from datetime import datetime, timedelta, date as Date
+from datetime import datetime, timedelta
 from natal import Chart, Data, HouseSys, Stats
 from natal.config import Config, Display, Orb, ThemeType
 from natal.const import ASPECT_NAMES
@@ -10,26 +10,23 @@ from typing import Literal
 sess = st.session_state
 
 
-def data_form(id: str, name: str, default_date: Date):
+def data_form(id: str, name: str, dt: datetime):
     chart_name = st.text_input("Name", name, key=f"{id}_name")
-    date = sess.get(f"{id}_date", default_date)
-    hr = sess.get(f"{id}_hr", 12)
-    min = sess.get(f"{id}_min", 0)
 
     c1, c2, c3 = st.columns(3)
     c1.date_input(
         "Date",
-        value=date,
-        max_value=Date(2300, 1, 1),
-        min_value=Date(1800, 1, 1),
+        value=sess.get(f"{id}_date", dt.date()),
+        max_value=datetime(2300, 1, 1),
+        min_value=datetime(1800, 1, 1),
         format="YYYY-MM-DD",
         key=f"{id}_date",
     )
-    c2.selectbox("Hour", range(24), index=hr, key=f"{id}_hr")
+    c2.selectbox("Hour", range(24), index=sess.get(f"{id}_hr", dt.hour), key=f"{id}_hr")
     c3.selectbox(
         "Minute",
         range(60),
-        index=min,
+        index=sess.get(f"{id}_min", dt.minute),
         key=f"{id}_min",
         help="daylight saving time",
     )
@@ -103,7 +100,7 @@ def stats_ui(data1: Data, data2: Data = None):
 
 
 def adjust_date(id: str, unit: str, shift: Literal[1, -1]):
-    dt = sess_datetime(id)
+    dt = sess_dt(id)
 
     match unit:
         case "week":
@@ -145,7 +142,7 @@ def data_obj(
     data1 = Data(
         name=name1,
         city=city1,
-        dt=sess_datetime(id1),
+        dt=sess_dt(id1),
         house_sys=house_sys,
         config=Config(orb=orb, display=display1),
     )
@@ -155,7 +152,7 @@ def data_obj(
         data2 = Data(
             name=name2,
             city=city2,
-            dt=sess_datetime(id2),
+            dt=sess_dt(id2),
             house_sys=house_sys,
             config=Config(orb=orb, display=display2),
         )
@@ -165,7 +162,11 @@ def data_obj(
     return data1, data2
 
 
-def sess_datetime(id: str):
-    date = sess[f"{id}_date"]
-    hr, min = sess[f"{id}_hr"], sess[f"{id}_min"]
-    return datetime(date.year, date.month, date.day, hr, min)
+def sess_dt(id: str):
+    return datetime(
+        sess.get(f"{id}_date").year,
+        sess.get(f"{id}_date").month,
+        sess.get(f"{id}_date").day,
+        sess.get(f"{id}_hr"),
+        sess.get(f"{id}_min"),
+    )

@@ -23,12 +23,12 @@ min = f"{id}_min"
 
 
 def test_default_name(birth: AppTest):
-    assert birth.text_input(key=name).value == None
+    assert birth.text_input(key=name).value == ""
 
 
 def test_default_date(birth: AppTest):
     assert birth.date_input(key=date).value == datetime(2000, 1, 1).date()
-    assert birth.selectbox(key=hr).value == 12
+    assert birth.selectbox(key=hr).value == 13
     assert birth.selectbox(key=min).value == 0
 
 
