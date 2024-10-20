@@ -6,9 +6,9 @@ from ui import (
     data_form,
     data_obj,
     date_adjustment,
-    display_ui,
-    options_ui,
-    orb_ui,
+    display_opt,
+    general_opt,
+    orb_opt,
     stats_ui,
 )
 
@@ -20,13 +20,13 @@ id1 = "d1"
 id2 = "d2"
 
 with st.sidebar:
-    options_ui()
+    general_opt()
     with st.expander("Orbs"):
-        orb_ui()
+        orb_opt()
     with st.expander("Birth Data Entities"):
-        display_ui(1)
+        display_opt(1)
     with st.expander("Transit / Synastry Entities"):
-        display_ui(2)
+        display_opt(2)
 
 
 with st.expander("Birth Data", expanded=True):
@@ -39,4 +39,5 @@ if name1 and city1:
     data1, data2 = data_obj(name1, city1, id1, name2, city2, id2)
     chart_ui(data1, data2)
     date_adjustment(id2 if data2 else id1)
-    stats_ui(data1, data2)
+    if st.session_state.show_stats:
+        stats_ui(data1, data2)
