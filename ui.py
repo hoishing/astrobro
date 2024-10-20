@@ -56,7 +56,7 @@ def general_opt():
     st.toggle("Show Statistics", key="show_stats")
     st.selectbox("House System", HouseSys._member_names_, index=0, key="hse_sys")
     st.selectbox("Chart Theme", ThemeType.__args__, index=1, key="theme")
-    st.slider("Chart Size", 400, 700, 600, 50, key="chart_size")
+    st.slider("Chart Size", 400, 1000, 650, 50, key="chart_size")
 
 
 def orb_opt():
@@ -97,7 +97,9 @@ def date_adjustment(id: str):
 
 def chart_ui(data1: Data, data2: Data = None):
     chart = Chart(data1=data1, data2=data2, width=sess.chart_size)
-    st.markdown(f"<div class='chart_svg'>{chart.svg}</div>", unsafe_allow_html=True)
+    st.write("")
+    with st.container(key="chart"):
+        st.image(chart.svg, width=sess.chart_size)
 
 
 def stats_ui(data1: Data, data2: Data = None):
