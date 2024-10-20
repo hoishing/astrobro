@@ -32,14 +32,13 @@
   .tabulate.cross_ref table {
     table-layout: fixed; }
 
-.st-key-prev > div {
+.st-key-prev .stButton {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end; }
 
 [data-testid="stColumn"] {
-  flex: 1 1 30%;
-  min-width: 30%; }
+  min-width: 60px; }
 
 .st-key-chart .stImage {
   display: flex;

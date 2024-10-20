@@ -54,8 +54,9 @@ def data_form(id: str, name: str, default_dt: datetime):
 
 def general_opt():
     st.toggle("Show Statistics", key="show_stats")
-    st.selectbox("House System", HouseSys._member_names_, index=0, key="hse_sys")
-    st.selectbox("Chart Theme", ThemeType.__args__, index=1, key="theme")
+    c1, c2 = st.columns(2)
+    c1.selectbox("House System", HouseSys._member_names_, index=0, key="hse_sys")
+    c2.selectbox("Chart Theme", ThemeType.__args__, index=1, key="theme")
     st.slider("Chart Size", 400, 1000, 650, 50, key="chart_size")
 
 
@@ -77,22 +78,20 @@ def display_opt(num: int):
         st.toggle(body, display[body], key=f"{body}{num}")
 
 
-def date_adjustment(id: str):
-    c1, c2, c3 = st.columns(3, vertical_alignment="bottom")
-    unit = c2.selectbox(
-        "date adjustment",
-        ["year", "month", "week", "day", "hour", "minute"],
-        index=3,
-        label_visibility="collapsed",
-    )
-    with c1:
-        button(
-            "❮", "alt+arrowleft", on_click=adjust_date, args=(id, unit, -1), key="prev"
-        )
-    with c3:
-        button(
-            "❯", "alt+arrowright", on_click=adjust_date, args=(id, unit, 1), key="next"
-        )
+def stepper(id: str):
+    with st.container(key=f"stepper"):
+        c1, c2, c3 = st.columns(3, vertical_alignment="bottom")
+        with c2:
+            unit = st.selectbox(
+                "date adjustment",
+                ["year", "month", "week", "day", "hour", "minute"],
+                index=3,
+                label_visibility="collapsed",
+            )
+        with c1:
+            button("❮", "alt+arrowleft", on_click=step, args=(id, unit, -1), key="prev")
+        with c3:
+            button("❯", "alt+arrowright", on_click=step, args=(id, unit, 1), key="next")
 
 
 def chart_ui(data1: Data, data2: Data = None):
@@ -111,7 +110,7 @@ def stats_ui(data1: Data, data2: Data = None):
 # utils ======================================================
 
 
-def adjust_date(id: str, unit: str, shift: Literal[1, -1]):
+def step(id: str, unit: str, shift: Literal[1, -1]):
     dt = get_dt(id)
 
     match unit:

@@ -4,81 +4,80 @@ $border-radius: 6px;
 $bg-color: #262730;
 
 .tabulate {
-    font-size: 1rem;
+  font-size: 1rem;
 
-    h4 {
-        font-size: 1.2rem;
-        margin-top: 2rem;
-        margin-bottom: 0.5rem;
+  h4 {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: $border-radius;
+    overflow: hidden;
+    border: 0.5px solid $border-color;
+    text-align: center;
+  }
+
+  th {
+    background-color: $bg-color;
+    font-weight: normal;
+  }
+  td,
+  th {
+    border: 0.5px solid $border-color;
+    padding: 0.3rem;
+  }
+
+  tr {
+    &:first-child {
+      th:first-child {
+        border-top-left-radius: $border-radius;
+      }
+      th:last-child {
+        border-top-right-radius: $border-radius;
+      }
     }
 
-    table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        border-radius: $border-radius;
-        overflow: hidden;
-        border: 0.5px solid $border-color;
-        text-align: center;
+    &:last-child {
+      td:first-child {
+        border-bottom-left-radius: $border-radius;
+      }
+      td:last-child {
+        border-bottom-right-radius: $border-radius;
+      }
     }
 
-    th {
-        background-color: $bg-color;
-        font-weight: normal;
+    &:nth-child(even) {
+      background-color: $bg-color;
     }
-    td,
-    th {
-        border: 0.5px solid $border-color;
-        padding: 0.3rem;
-    }
+  }
 
-    tr {
-        &:first-child {
-            th:first-child {
-                border-top-left-radius: $border-radius;
-            }
-            th:last-child {
-                border-top-right-radius: $border-radius;
-            }
-        }
-
-        &:last-child {
-            td:first-child {
-                border-bottom-left-radius: $border-radius;
-            }
-            td:last-child {
-                border-bottom-right-radius: $border-radius;
-            }
-        }
-
-        &:nth-child(even) {
-            background-color: $bg-color;
-        }
-    }
-
-    &.cross_ref table {
-        table-layout: fixed;
-    }
+  &.cross_ref table {
+    table-layout: fixed;
+  }
 }
 
-.st-key-prev > div {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+.st-key-prev .stButton {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 [data-testid="stColumn"] {
-    flex: 1 1 30%;
-    min-width: 30%;
+  min-width: 60px;
 }
 
 .st-key-chart .stImage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #MainMenu,
 footer {
-    display: none;
+  display: none;
 }

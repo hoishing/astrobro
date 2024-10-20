@@ -24,3 +24,4 @@ CITY_ASCII = Data.cities.iloc[:, 0]
 BODIES = Display().model_fields.keys()
 STYLE = f"<style>{Path("style.css").read_text()}</style>"
 LOGO = "static/astrobro-logo.png"
+CHART_SIZE = 700
