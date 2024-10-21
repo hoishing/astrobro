@@ -40,11 +40,6 @@
 [data-testid="stColumn"] {
   min-width: 60px; }
 
-.st-key-chart .stImage {
-  display: flex;
-  justify-content: center;
-  align-items: center; }
-
 #MainMenu,
 footer {
   display: none; }

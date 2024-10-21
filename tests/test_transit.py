@@ -62,4 +62,4 @@ def test_sample_data(transit: AppTest, sess: SafeSessionState):
 def test_next_button(transit: AppTest, sess: SafeSessionState):
     # press next button
     transit.button(key="next").click().run()
-    assert sess[date2] == date(2014, 4, 21)
+    assert transit.date_input(key=date2).value == date(2014, 4, 21)

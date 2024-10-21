@@ -1,5 +1,5 @@
 import streamlit as st
-from const import BODIES, CITY_ASCII
+from const import BODIES, CITY_ASCII, CHART_SIZE
 from datetime import datetime, timedelta, date as Date
 from natal import Chart, Data, HouseSys, Stats
 from natal.config import Config, Display, Orb, ThemeType
@@ -57,7 +57,6 @@ def general_opt():
     c1, c2 = st.columns(2)
     c1.selectbox("House System", HouseSys._member_names_, index=0, key="hse_sys")
     c2.selectbox("Chart Theme", ThemeType.__args__, index=1, key="theme")
-    st.slider("Chart Size", 400, 1000, 650, 50, key="chart_size")
 
 
 def orb_opt():
@@ -95,10 +94,9 @@ def stepper(id: str):
 
 
 def chart_ui(data1: Data, data2: Data = None):
-    chart = Chart(data1=data1, data2=data2, width=sess.chart_size)
+    chart = Chart(data1=data1, data2=data2, width=CHART_SIZE)
     st.write("")
-    with st.container(key="chart"):
-        st.image(chart.svg, width=sess.chart_size)
+    st.image(chart.svg, use_column_width=True)
 
 
 def stats_ui(data1: Data, data2: Data = None):
