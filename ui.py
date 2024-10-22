@@ -60,21 +60,77 @@ def general_opt():
 
 
 def orb_opt():
-    orb = Orb()
+    orb = sess.get("orb", Orb())
     for aspect in ASPECT_NAMES:
         st.number_input(
             label=aspect,
-            min_value=1,
+            min_value=0,
             max_value=10,
             value=orb[aspect],
+            on_change=lambda: setattr(sess, "orb", get_orb()),
             key=aspect,
         )
+    sess["orb"] = orb
+
+    c1, c2, c3 = st.columns(3)
+    c1.button(
+        "clear",
+        key="clear_orbs",
+        use_container_width=True,
+        on_click=lambda: set_orbs([0, 0, 0, 0, 0]),
+    )
+    c2.button(
+        "transit",
+        key="transit_orbs",
+        use_container_width=True,
+        on_click=lambda: set_orbs([2, 2, 2, 2, 1]),
+    )
+    c3.button(
+        "default",
+        key="default_orbs",
+        use_container_width=True,
+        on_click=lambda: set_orbs(Orb().model_dump().values()),
+    )
 
 
 def display_opt(num: int):
-    display = Display()
-    for body in BODIES:
-        st.toggle(body, display[body], key=f"{body}{num}")
+    display = sess.get(f"display{num}", Display())
+
+    def toggle(body: str):
+        st.toggle(
+            body,
+            display[body],
+            key=f"{body}{num}",
+            on_change=lambda: setattr(sess, f"display{num}", get_displays(num)),
+        )
+
+    c1, c2 = st.columns(2)
+    with c1:
+        for body in BODIES[:11]:
+            toggle(body)
+    with c2:
+        for body in BODIES[11:]:
+            toggle(body)
+
+    c1, c2, c3 = st.columns(3)
+    c1.button(
+        "inner",
+        key=f"inner_display{num}",
+        use_container_width=True,
+        on_click=lambda: set_displays(num, "inner"),
+    )
+    c2.button(
+        "planets",
+        key=f"planets_display{num}",
+        use_container_width=True,
+        on_click=lambda: set_displays(num, "planets"),
+    )
+    c3.button(
+        "default",
+        key=f"default_display{num}",
+        use_container_width=True,
+        on_click=lambda: set_displays(num, "default"),
+    )
 
 
 def stepper(id: str):
@@ -143,7 +199,8 @@ def data_obj(
     id2: str = None,
 ):
     house_sys = HouseSys[sess[f"hse_sys"]]
-    orb = {aspect: sess[aspect] for aspect in ASPECT_NAMES}
+    orb = sess.orb
+    # orb = {aspect: sess[aspect] for aspect in ASPECT_NAMES}
     display1 = {body: sess[f"{body}1"] for body in BODIES}
 
     data1 = Data(
@@ -174,3 +231,31 @@ def get_dt(id: str, date: Date = None, hr: int = None, minute: int = None) -> da
     hr = hr or sess.get(f"{id}_hr")
     minute = minute or sess.get(f"{id}_min")
     return datetime(date.year, date.month, date.day, hr, minute)
+
+
+def get_orb():
+    return Orb(**{aspect: sess[aspect] for aspect in ASPECT_NAMES})
+
+
+def set_orbs(vals: list[int]):
+    for aspect, val in zip(ASPECT_NAMES, vals):
+        sess.orb[aspect] = val
+
+
+def get_displays(num: int):
+    return Display(**{body: sess[f"{body}{num}"] for body in BODIES})
+
+
+def set_displays(num: int, opt: Literal["inner", "planets", "default"]):
+    display = dict.fromkeys(BODIES, False)
+    inner = ["asc", "sun", "moon", "mercury", "venus", "mars"]
+    match opt:
+        case "inner":
+            display.update(dict.fromkeys(inner, True))
+        case "planets":
+            planets = inner + ["jupiter", "saturn", "uranus", "neptune", "pluto"]
+            display.update(dict.fromkeys(planets, True))
+        case "default":
+            display = Display()
+
+    sess[f"display{num}"] = Display(**display)

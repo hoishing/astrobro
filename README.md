@@ -29,7 +29,6 @@ streamlit run main.py
 - [x] Synastry chart
 - deployment
     - [x] web app with [Streamlit] community cloud
-        - [ ] PWA with correct icon and title
     - [ ] local install with `pyinstaller`
     - [ ] mobile app
 - [x] Natal chart in SVG with [natal]
@@ -40,8 +39,9 @@ streamlit run main.py
     - [x] color theme
     - [x] toggle stats
     - [x] orbs
-        - [x] birth / transit / synastry presets
+        - [x] clear / transit / default presets
     - [x] show / hide celestial bodies
+        - [x] default / inner / planets presets
     - [ ] custom theme colors
 - [ ] Birth chart interpretation
 - [ ] Transit chart interpretation
