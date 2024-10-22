@@ -43,13 +43,12 @@ streamlit run main.py
     - [x] show / hide celestial bodies
         - [x] default / inner / planets presets
     - [ ] custom theme colors
-- [ ] Birth chart interpretation
-- [ ] Transit chart interpretation
-- [ ] Synastry chart interpretation
-- [ ] print chart and stats in PDF
+- [ ] AI chart interpretation
 - [ ] chat with AI
+- [ ] print chart and stats in PDF
 - [ ] save charts in browser local storage
 - [ ] import / export charts info and settings
+- [ ] i18n
 
 [streamlit]: https://streamlit.io
 [natal]: https://github.com/hoishing/natal

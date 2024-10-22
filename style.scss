@@ -75,3 +75,7 @@ $bg-color: #262730;
 footer {
   display: none;
 }
+
+[data-testid="stSidebar"][aria-expanded="true"] {
+  min-width: 365px;
+}

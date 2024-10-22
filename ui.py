@@ -74,8 +74,8 @@ def orb_opt():
 
     c1, c2, c3 = st.columns(3)
     c1.button(
-        "clear",
-        key="clear_orbs",
+        "disable",
+        key="disable_orbs",
         use_container_width=True,
         on_click=lambda: set_orbs([0, 0, 0, 0, 0]),
     )
@@ -106,26 +106,20 @@ def display_opt(num: int):
 
     c1, c2 = st.columns(2)
     with c1:
-        for body in BODIES[:11]:
+        for body in BODIES[:10]:
             toggle(body)
     with c2:
-        for body in BODIES[11:]:
+        for body in BODIES[10:]:
             toggle(body)
 
-    c1, c2, c3 = st.columns(3)
+    c1, c2 = st.columns(2)
     c1.button(
-        "inner",
+        "inner planets",
         key=f"inner_display{num}",
         use_container_width=True,
         on_click=lambda: set_displays(num, "inner"),
     )
     c2.button(
-        "planets",
-        key=f"planets_display{num}",
-        use_container_width=True,
-        on_click=lambda: set_displays(num, "planets"),
-    )
-    c3.button(
         "default",
         key=f"default_display{num}",
         use_container_width=True,
