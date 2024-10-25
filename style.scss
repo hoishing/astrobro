@@ -79,3 +79,9 @@ footer {
 [data-testid="stSidebar"][aria-expanded="true"] {
   min-width: 365px;
 }
+
+.chart_svg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

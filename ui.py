@@ -1,8 +1,8 @@
 import streamlit as st
-from const import BODIES, CITY_ASCII, CHART_SIZE
+from const import BODIES, CITY_ASCII
 from datetime import datetime, timedelta, date as Date
 from natal import Chart, Data, HouseSys, Stats
-from natal.config import Config, Display, Orb, ThemeType
+from natal.config import Config, Display, Orb, ThemeType, Chart as ChartConfig
 from natal.const import ASPECT_NAMES
 from streamlit_shortcuts import button
 from typing import Literal
@@ -57,6 +57,7 @@ def general_opt():
     c1, c2 = st.columns(2)
     c1.selectbox("House System", HouseSys._member_names_, index=0, key="hse_sys")
     c2.selectbox("Chart Theme", ThemeType.__args__, index=1, key="theme")
+    st.slider("Chart Size", 400, 700, 600, 50, key="chart_size")
 
 
 def orb_opt():
@@ -144,9 +145,10 @@ def stepper(id: str):
 
 
 def chart_ui(data1: Data, data2: Data = None):
-    chart = Chart(data1=data1, data2=data2, width=CHART_SIZE)
+    chart = Chart(data1=data1, data2=data2, width=sess.chart_size)
+    html = f"<div class='chart_svg'>{chart.styled_svg}</div>"
     st.write("")
-    st.image(chart.svg, use_column_width=True)
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def stats_ui(data1: Data, data2: Data = None):
@@ -196,13 +198,14 @@ def data_obj(
     orb = sess.orb
     # orb = {aspect: sess[aspect] for aspect in ASPECT_NAMES}
     display1 = {body: sess[f"{body}1"] for body in BODIES}
+    chart = ChartConfig(font="Noto Sans Symbols, Cardo, Arial Unicode MS, sans-serif")
 
     data1 = Data(
         name=name1,
         city=city1,
         dt=get_dt(id1),
         house_sys=house_sys,
-        config=Config(orb=orb, display=display1),
+        config=Config(orb=orb, display=display1, chart=chart),
     )
 
     if name2 and city2 and id2:
@@ -212,7 +215,7 @@ def data_obj(
             city=city2,
             dt=get_dt(id2),
             house_sys=house_sys,
-            config=Config(orb=orb, display=display2),
+            config=Config(orb=orb, display=display2, chart=chart),
         )
     else:
         data2 = None
