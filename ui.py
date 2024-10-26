@@ -57,7 +57,7 @@ def general_opt():
     c1, c2 = st.columns(2)
     c1.selectbox("House System", HouseSys._member_names_, index=0, key="hse_sys")
     c2.selectbox("Chart Theme", ThemeType.__args__, index=1, key="theme")
-    st.slider("Chart Size", 400, 700, 600, 50, key="chart_size")
+    st.slider("Chart Size", 300, 1200, 600, 50, key="chart_size")
 
 
 def orb_opt():
@@ -145,10 +145,10 @@ def stepper(id: str):
 
 
 def chart_ui(data1: Data, data2: Data = None):
-    chart = Chart(data1=data1, data2=data2, width=sess.chart_size)
-    html = f"<div class='chart_svg'>{chart.styled_svg}</div>"
     st.write("")
-    st.markdown(html, unsafe_allow_html=True)
+    chart = Chart(data1=data1, data2=data2, width=sess.chart_size)
+    with st.container(key="chart_svg"):
+        st.markdown(chart.styled_svg, unsafe_allow_html=True)
 
 
 def stats_ui(data1: Data, data2: Data = None):
@@ -198,24 +198,24 @@ def data_obj(
     orb = sess.orb
     # orb = {aspect: sess[aspect] for aspect in ASPECT_NAMES}
     display1 = {body: sess[f"{body}1"] for body in BODIES}
-    chart = ChartConfig(font="Noto Sans Symbols, Cardo, Arial Unicode MS, sans-serif")
 
     data1 = Data(
         name=name1,
         city=city1,
         dt=get_dt(id1),
         house_sys=house_sys,
-        config=Config(orb=orb, display=display1, chart=chart),
+        config=Config(theme_type=sess.theme, orb=orb, display=display1),
     )
 
     if name2 and city2 and id2:
         display2 = {body: sess[f"{body}2"] for body in BODIES}
+        orb2 = Orb(**{aspect: 0 for aspect in ASPECT_NAMES})
         data2 = Data(
             name=name2,
             city=city2,
             dt=get_dt(id2),
             house_sys=house_sys,
-            config=Config(orb=orb, display=display2, chart=chart),
+            config=Config(orb=orb2, display=display2),
         )
     else:
         data2 = None

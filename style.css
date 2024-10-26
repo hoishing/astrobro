@@ -47,7 +47,15 @@ footer {
 [data-testid="stSidebar"][aria-expanded="true"] {
   min-width: 365px; }
 
-.chart_svg {
+.st-key-chart_svg > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: min-content; }
+
+.st-key-chart_svg .stMarkdown {
   display: flex;
   justify-content: center;
   align-items: center; }
+  .st-key-chart_svg .stMarkdown [data-testid="stMarkdownContainer"] {
+    position: relative; }

@@ -3,6 +3,12 @@ $border-color: #3e4044;
 $border-radius: 6px;
 $bg-color: #262730;
 
+@mixin center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .tabulate {
   font-size: 1rem;
 
@@ -80,8 +86,14 @@ footer {
   min-width: 365px;
 }
 
-.chart_svg {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.st-key-chart_svg > div {
+  @include center-flex;
+  min-width: min-content;
+}
+
+.st-key-chart_svg .stMarkdown {
+  @include center-flex;
+  [data-testid="stMarkdownContainer"] {
+    position: relative;
+  }
 }
