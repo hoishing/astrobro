@@ -14,6 +14,7 @@ ABOUT = f"💫 &nbsp;AstroBro :&nbsp; your pocket astrologer\n\n{SOURCE_CODE}"
 PAGE_CONFIG = dict(
     page_title="AstroBro",
     page_icon="💫",
+    layout="wide",
     menu_items={
         "About": ABOUT,
         "Get help": "https://github.com/hoishing/astrobro/issues",
