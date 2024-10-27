@@ -3,6 +3,9 @@ enableStaticServing = true
 
 [theme]
 base = "dark"
+primaryColor = "#ffbf00"
+backgroundColor = "#212529"
+secondaryBackgroundColor = "#343a40"
 
 [browser]
 gatherUsageStats = false
