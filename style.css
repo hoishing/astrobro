@@ -41,7 +41,8 @@
   min-width: 60px; }
 
 #MainMenu,
-footer {
+footer,
+.stDecoration {
   display: none; }
 
 [data-testid="stSidebar"][aria-expanded="true"] {
@@ -59,3 +60,6 @@ footer {
   align-items: center; }
   .st-key-chart_svg .stMarkdown [data-testid="stMarkdownContainer"] {
     position: relative; }
+
+.stMainBlockContainer {
+  padding-top: 4rem; }

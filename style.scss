@@ -78,7 +78,8 @@ $bg-color: #262730;
 }
 
 #MainMenu,
-footer {
+footer,
+.stDecoration {
   display: none;
 }
 
@@ -96,4 +97,8 @@ footer {
   [data-testid="stMarkdownContainer"] {
     position: relative;
   }
+}
+
+.stMainBlockContainer {
+  padding-top: 4rem;
 }
