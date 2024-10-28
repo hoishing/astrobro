@@ -1,17 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "manifest_version": 2,
+  "id": "https://hoishing.github.io/astrobro",
   "version": "1.0.0",
   "name": "AstroBro",
   "short_name": "AstroBro",
   "description": "Your Astrology Bro",
-  "start_url": "/",
+  "start_url": "https://hoishing.github.io/astrobro",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#212529",
+  "theme_color": "#343a40",
   "icons": [
     {
-      "src": "./astrobro-512.png",
+      "src": "./astrobro-256.png",
       "sizes": "512x512",
       "type": "image/png"
     }
