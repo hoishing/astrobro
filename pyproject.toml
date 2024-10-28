@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "astrobro"
-version = "0.5.3"
+version = "0.5.4"
 description = ""
 authors = ["Kelvin Ng <hoishing@gmail.com>"]
 readme = "README.md"

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "manifest_version": 2,
+  "version": "1.0.0",
+  "name": "AstroBro",
+  "short_name": "AstroBro",
+  "description": "Your Astrology Bro",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "./astrobro-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
