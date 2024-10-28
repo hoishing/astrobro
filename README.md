@@ -1,6 +1,6 @@
 # AstroBro
 
-> your astrologer bro
+> your astrology bro
 
 ## Usage
 

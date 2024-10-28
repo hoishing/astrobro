@@ -1,3 +1,0 @@
-natal
-streamlit
-streamlit-shortcuts
