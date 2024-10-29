@@ -203,8 +203,9 @@ def data_obj(
         name=name1,
         city=city1,
         dt=get_dt(id1),
-        house_sys=house_sys,
-        config=Config(theme_type=sess.theme, orb=orb, display=display1),
+        config=Config(
+            house_sys=house_sys, theme_type=sess.theme, orb=orb, display=display1
+        ),
     )
 
     if name2 and city2 and id2:
@@ -214,8 +215,7 @@ def data_obj(
             name=name2,
             city=city2,
             dt=get_dt(id2),
-            house_sys=house_sys,
-            config=Config(orb=orb2, display=display2),
+            config=Config(house_sys=house_sys, orb=orb2, display=display2),
         )
     else:
         data2 = None

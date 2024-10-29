@@ -8,6 +8,14 @@
 
 <https://astrobro.streamlit.app>
 
+### Install PWA (Progressive Web App)
+
+- visit: <https://hoishing.github.io/astrobro>
+- Desktop:
+    - Chrome: click `Install` button in the address bar
+    - Safari: click `Share` button then choose `Add to Dock`
+- Mobile: click `Share` button then choose `Add to Home Screen`
+
 ### Install and Run Locally with Python
 
 ```bash
