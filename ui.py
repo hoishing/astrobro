@@ -135,7 +135,7 @@ def save_load_ui():
     data2_ready = name2 and sess.get("city2")
     filename = f"{name1}_{name2}" if data2_ready else name1
 
-    with st.expander("save / load data"):
+    with st.expander("save / load data", expanded=True):
         st.download_button(
             "save chart data",
             archive_str() if data1_ready else "",
