@@ -1,8 +1,9 @@
 import streamlit as st
+from archive import archive_str, import_data, get_dt
 from const import BODIES, CITY_ASCII
 from datetime import datetime, timedelta, date as Date
 from natal import Chart, Data, HouseSys, Stats
-from natal.config import Config, Display, Orb, ThemeType, Chart as ChartConfig
+from natal.config import Config, Display, Orb, ThemeType
 from natal.const import ASPECT_NAMES
 from streamlit_shortcuts import button
 from typing import Literal
@@ -10,68 +11,64 @@ from typing import Literal
 sess = st.session_state
 
 
-def data_form(id: str, name: str, default_dt: datetime):
-    dt = sess.get(f"{id}_dt", default_dt)
-
+def data_form(id: int):
+    sess[f"name{id}"] = sess.get(f"name{id}", "" if id == 1 else "transit")
+    sess[f"city{id}"] = sess.get(f"city{id}", None)
     c1, c2 = st.columns(2)
-    chart_name = c1.text_input("Name", name, key=f"{id}_name")
-    city = c2.selectbox(
-        "City", CITY_ASCII, index=None, key=f"{id}_city", help="type to search"
+    name = c1.text_input("Name", key=f"name{id}")
+    city = c2.selectbox("City", CITY_ASCII, key=f"city{id}", help="type to search")
+    now = datetime.now()
+    sess[f"date{id}"] = sess.get(f"date{id}") or (
+        Date(2000, 1, 1) if id == 1 else now.date()
     )
-
+    sess[f"hr{id}"] = sess.get(f"hr{id}") or (13 if id == 1 else now.hour)
+    sess[f"min{id}"] = sess.get(f"min{id}") or (0 if id == 1 else now.minute)
     c1, c2, c3 = st.columns(3)
     c1.date_input(
         "Date",
-        value=dt.date(),
-        max_value=datetime(2300, 1, 1),
-        min_value=datetime(1800, 1, 1),
+        max_value=Date(2300, 1, 1),
+        min_value=Date(1800, 1, 1),
         format="YYYY-MM-DD",
-        key=f"{id}_date",
-        on_change=lambda: setattr(
-            sess, f"{id}_dt", get_dt(id, date=sess[f"{id}_date"])
-        ),
+        key=f"date{id}",
     )
     c2.selectbox(
         "Hour",
         range(24),
-        index=dt.hour,
-        key=f"{id}_hr",
-        on_change=lambda: setattr(sess, f"{id}_dt", get_dt(id, hr=sess[f"{id}_hr"])),
+        key=f"hr{id}",
     )
     c3.selectbox(
         "Minute",
         range(60),
-        index=dt.minute,
-        key=f"{id}_min",
+        key=f"min{id}",
         help="daylight saving time",
-        on_change=lambda: setattr(
-            sess, f"{id}_dt", get_dt(id, minute=sess[f"{id}_min"])
-        ),
     )
 
-    return chart_name, city
+    return name, city
 
 
 def general_opt():
     st.toggle("Show Statistics", key="show_stats")
+    sess["house_sys"] = sess.get("house_sys", "Placidus")
+    sess["theme_type"] = sess.get("theme_type", "dark")
     c1, c2 = st.columns(2)
-    c1.selectbox("House System", HouseSys._member_names_, index=0, key="hse_sys")
-    c2.selectbox("Chart Theme", ThemeType.__args__, index=1, key="theme")
+    c1.selectbox("House System", HouseSys._member_names_, key="house_sys")
+    c2.selectbox("Chart Theme", ThemeType.__args__, key="theme_type")
     st.slider("Chart Size", 300, 1200, 600, 50, key="chart_size")
 
 
 def orb_opt():
-    orb = sess.get("orb", Orb())
+    sess.orb = sess.get("orb", Orb())
     for aspect in ASPECT_NAMES:
         st.number_input(
             label=aspect,
+            value=sess.orb[aspect],
             min_value=0,
             max_value=10,
-            value=orb[aspect],
-            on_change=lambda: setattr(sess, "orb", get_orb()),
+            # actualize at change time, loop causes `aspect` stick to last value
+            on_change=lambda asp: sess.orb.update({asp: sess[asp]}),
+            args=(aspect,),  # actualize at create time
             key=aspect,
         )
-    sess["orb"] = orb
 
     c1, c2, c3 = st.columns(3)
     c1.button(
@@ -95,14 +92,17 @@ def orb_opt():
 
 
 def display_opt(num: int):
-    display = sess.get(f"display{num}", Display())
+    display_n = f"display{num}"
+    sess[display_n] = sess.get(display_n, Display())
 
     def toggle(body: str):
+        body_n = f"{body}{num}"
+        sess[body_n] = sess[display_n][body]
         st.toggle(
             body,
-            display[body],
-            key=f"{body}{num}",
-            on_change=lambda: setattr(sess, f"display{num}", get_displays(num)),
+            key=body_n,
+            # actualize at change time, won't stick to loop last value because its scoped by the enclosing function
+            on_change=lambda: sess[display_n].update({body: sess[body_n]}),
         )
 
     c1, c2 = st.columns(2)
@@ -128,9 +128,33 @@ def display_opt(num: int):
     )
 
 
-def stepper(id: str):
+def save_load_ui():
+    name1 = sess.get("name1")
+    data1_ready = name1 and sess.get("city1")
+    name2 = sess.get("name2")
+    data2_ready = name2 and sess.get("city2")
+    filename = f"{name1}_{name2}" if data2_ready else name1
+
+    with st.expander("save / load data"):
+        st.download_button(
+            "save chart data",
+            archive_str() if data1_ready else "",
+            file_name=f"{filename}.json",
+            use_container_width=True,
+            key="save_button",
+            disabled=not data1_ready,
+        )
+        st.file_uploader(
+            "load chart data",
+            type="json",
+            key="load_file",
+            on_change=lambda: import_data(sess.load_file),
+        )
+
+
+def stepper(id: int):
     with st.container(key=f"stepper"):
-        c1, c2, c3 = st.columns(3, vertical_alignment="bottom")
+        c1, c2, c3 = st.columns([3, 4, 3], vertical_alignment="bottom")
         with c2:
             unit = st.selectbox(
                 "date adjustment",
@@ -160,7 +184,7 @@ def stats_ui(data1: Data, data2: Data = None):
 # utils ======================================================
 
 
-def step(id: str, unit: str, shift: Literal[1, -1]):
+def step(id: int, unit: str, shift: Literal[1, -1]):
     dt = get_dt(id)
 
     match unit:
@@ -183,38 +207,37 @@ def step(id: str, unit: str, shift: Literal[1, -1]):
     if unit not in ["month", "year"]:
         dt += delta
 
-    sess[f"{id}_dt"] = dt
+    sess[f"date{id}"] = dt.date()
+    sess[f"hr{id}"] = dt.hour
+    sess[f"min{id}"] = dt.minute
 
 
 def data_obj(
     name1: str,
     city1: str,
-    id1: str,
     name2: str = None,
     city2: str = None,
-    id2: str = None,
 ):
-    house_sys = HouseSys[sess[f"hse_sys"]]
+    house_sys = HouseSys[sess[f"house_sys"]]
     orb = sess.orb
-    # orb = {aspect: sess[aspect] for aspect in ASPECT_NAMES}
     display1 = {body: sess[f"{body}1"] for body in BODIES}
 
     data1 = Data(
         name=name1,
         city=city1,
-        dt=get_dt(id1),
+        dt=get_dt(1),
         config=Config(
-            house_sys=house_sys, theme_type=sess.theme, orb=orb, display=display1
+            house_sys=house_sys, theme_type=sess.theme_type, orb=orb, display=display1
         ),
     )
 
-    if name2 and city2 and id2:
+    if name2 and city2:
         display2 = {body: sess[f"{body}2"] for body in BODIES}
         orb2 = Orb(**{aspect: 0 for aspect in ASPECT_NAMES})
         data2 = Data(
             name=name2,
             city=city2,
-            dt=get_dt(id2),
+            dt=get_dt(2),
             config=Config(house_sys=house_sys, orb=orb2, display=display2),
         )
     else:
@@ -223,24 +246,9 @@ def data_obj(
     return data1, data2
 
 
-def get_dt(id: str, date: Date = None, hr: int = None, minute: int = None) -> datetime:
-    date = date or sess.get(f"{id}_date")
-    hr = hr or sess.get(f"{id}_hr")
-    minute = minute or sess.get(f"{id}_min")
-    return datetime(date.year, date.month, date.day, hr, minute)
-
-
-def get_orb():
-    return Orb(**{aspect: sess[aspect] for aspect in ASPECT_NAMES})
-
-
 def set_orbs(vals: list[int]):
     for aspect, val in zip(ASPECT_NAMES, vals):
         sess.orb[aspect] = val
-
-
-def get_displays(num: int):
-    return Display(**{body: sess[f"{body}{num}"] for body in BODIES})
 
 
 def set_displays(num: int, opt: Literal["inner", "planets", "default"]):

@@ -1,5 +1,7 @@
 [server]
 enableStaticServing = true
+maxUploadSize = 1
+runOnSave = true
 
 [theme]
 base = "dark"

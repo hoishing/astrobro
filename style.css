@@ -13,7 +13,7 @@
     border: 0.5px solid #3e4044;
     text-align: center; }
   .tabulate th {
-    background-color: #262730;
+    background-color: #282D31;
     font-weight: normal; }
   .tabulate td,
   .tabulate th {
@@ -28,7 +28,7 @@
   .tabulate tr:last-child td:last-child {
     border-bottom-right-radius: 6px; }
   .tabulate tr:nth-child(even) {
-    background-color: #262730; }
+    background-color: #282D31; }
   .tabulate.cross_ref table {
     table-layout: fixed; }
 
