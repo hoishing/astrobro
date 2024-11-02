@@ -146,7 +146,6 @@ def save_load_ui():
         )
         st.file_uploader(
             "load chart data",
-            type="json",
             key="load_file",
             on_change=lambda: import_data(sess.load_file),
         )
