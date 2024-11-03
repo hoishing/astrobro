@@ -2,6 +2,8 @@
 enableStaticServing = true
 maxUploadSize = 1
 runOnSave = true
+enableCORS = false
+enableXsrfProtection = false
 
 [theme]
 base = "dark"
