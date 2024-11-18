@@ -1,10 +1,13 @@
 import streamlit as st
-from archive import archive_str, import_data, get_dt
+from archive import archive_str, get_dt, import_data
 from const import BODIES, CITY_ASCII
-from datetime import datetime, timedelta, date as Date
+from datetime import date as Date
+from datetime import datetime, timedelta
+from io import BytesIO
 from natal import Chart, Data, HouseSys, Stats
 from natal.config import Config, Display, Orb, ThemeType
 from natal.const import ASPECT_NAMES
+from natal.report import Report
 from streamlit_shortcuts import button
 from typing import Literal
 
@@ -16,7 +19,7 @@ def data_form(id: int):
     sess[f"city{id}"] = sess.get(f"city{id}", None)
     c1, c2 = st.columns(2)
     name = c1.text_input("Name", key=f"name{id}")
-    city = c2.selectbox("City", CITY_ASCII, key=f"city{id}", help="type to search")
+    city = c2.selectbox("City", CITY_ASCII, key=f"city{id}", help="type to sarch")
     now = datetime.now()
     sess[f"date{id}"] = sess.get(f"date{id}") or (
         Date(2000, 1, 1) if id == 1 else now.date()
@@ -47,7 +50,22 @@ def data_form(id: int):
 
 
 def general_opt():
-    st.toggle("Show Statistics", key="show_stats")
+    c1, c2 = st.columns(2)
+    c1.toggle("Show Statistics", key="show_stats")
+    with c2:
+        filename, name1, city1, *_ = input_status()
+        ready = name1 and city1
+        with st.empty():
+            if st.button("Generate PDF", use_container_width=True, disabled=not ready):
+                with st.spinner("generating..."):
+                    pdf = pdf_report()
+                st.download_button(
+                    ":material/download: Download",
+                    pdf,
+                    file_name=f"{filename}_report.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                )
     sess["house_sys"] = sess.get("house_sys", "Placidus")
     sess["theme_type"] = sess.get("theme_type", "dark")
     c1, c2 = st.columns(2)
@@ -129,11 +147,8 @@ def display_opt(num: int):
 
 
 def save_load_ui():
-    name1 = sess.get("name1")
-    data1_ready = name1 and sess.get("city1")
-    name2 = sess.get("name2")
-    data2_ready = name2 and sess.get("city2")
-    filename = f"{name1}_{name2}" if data2_ready else name1
+    filename, name1, city1, *_ = input_status()
+    data1_ready = name1 and city1
 
     with st.expander("save / load data", expanded=True):
         st.download_button(
@@ -152,7 +167,7 @@ def save_load_ui():
 
 
 def stepper(id: int):
-    with st.container(key=f"stepper"):
+    with st.container(key="stepper"):
         c1, c2, c3 = st.columns([3, 4, 3], vertical_alignment="bottom")
         with c2:
             unit = st.selectbox(
@@ -171,7 +186,7 @@ def chart_ui(data1: Data, data2: Data = None):
     st.write("")
     chart = Chart(data1=data1, data2=data2, width=sess.chart_size)
     with st.container(key="chart_svg"):
-        st.markdown(chart.styled_svg, unsafe_allow_html=True)
+        st.markdown(chart.svg, unsafe_allow_html=True)
 
 
 def stats_ui(data1: Data, data2: Data = None):
@@ -217,7 +232,7 @@ def data_obj(
     name2: str = None,
     city2: str = None,
 ):
-    house_sys = HouseSys[sess[f"house_sys"]]
+    house_sys = HouseSys[sess["house_sys"]]
     orb = sess.orb
     display1 = {body: sess[f"{body}1"] for body in BODIES}
 
@@ -263,3 +278,22 @@ def set_displays(num: int, opt: Literal["inner", "planets", "default"]):
             display = Display()
 
     sess[f"display{num}"] = Display(**display)
+
+
+def pdf_report() -> BytesIO | str:
+    _, name1, city1, name2, city2 = input_status()
+    if name1 and city1:
+        data1, data2 = data_obj(name1, city1, name2, city2)
+        report = Report(data1, data2)
+        return report.create_pdf(report.full_report)
+    else:
+        return ""
+
+
+def input_status() -> tuple[str, bool, bool, str, str, str, str]:
+    name1 = sess.get("name1")
+    city1 = sess.get("city1")
+    name2 = sess.get("name2")
+    city2 = sess.get("city2")
+    filename = f"{name1}_{name2}" if (name2 and city2) else name1
+    return filename, name1, city1, name2, city2

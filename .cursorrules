@@ -1,0 +1,30 @@
+Projects requirements
+
+- use python 3.12 or above
+- each function should be type hinted
+- use latest type hints syntax when possible, eg.
+    - `list[int]` instead of `List[int]`
+    - `dict[str, int]` instead of `Dict[str, int]`
+    - `tuple[int, ...]` instead of `Tuple[int, ...]`
+    - `A | B` instead of `Union[A, B]`
+    - use `typing.Self` when possible
+- when writing docstrings, follow these guidelines:
+    - use Google style docstrings
+    - don't write type hints in docstrings
+    - put the short description on the same line as the `"""`, like this:
+
+    ```python
+    def my_function(a: int) -> int: ...
+        """Short description.
+
+        Args:
+            Some description.
+
+        Returns:
+            Some description.
+        """
+    ```
+
+- css rules:
+    - use nested selectors to style components
+    - try to use variables for colors, sizes, etc.
