@@ -18,12 +18,14 @@ st.markdown(STYLE, unsafe_allow_html=True)
 
 with st.sidebar:
     general_opt()
-    with st.expander("Orbs"):
-        orb_opt()
-    with st.expander("Birth Data Entities"):
-        display_opt(1)
-    with st.expander("Transit / Synastry Entities"):
-        display_opt(2)
+    with st.expander("Options"):
+        t1, t2, t3 = st.tabs(["Orbs", "Birth", "Transit/Synastry"])
+        with t1:
+            orb_opt()
+        with t2:
+            display_opt(1)
+        with t3:
+            display_opt(2)
     save_load_ui()
 
 with st.expander("Birth Data", expanded=True):

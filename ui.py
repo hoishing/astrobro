@@ -150,7 +150,7 @@ def save_load_ui():
     filename, name1, city1, *_ = input_status()
     data1_ready = name1 and city1
 
-    with st.expander("save / load data", expanded=True):
+    with st.expander("save / load data"):
         st.download_button(
             "save chart data",
             archive_str() if data1_ready else "",
