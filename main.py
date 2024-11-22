@@ -11,6 +11,7 @@ from ui import (
     stats_ui,
     stepper,
 )
+from st_screen_detector import screen_detector
 
 st.set_page_config(**PAGE_CONFIG)
 st.logo(LOGO)
@@ -31,6 +32,8 @@ with st.expander("Birth Data", expanded=True):
 
 with st.expander("Transit / Synastry"):
     name2, city2 = data_form(2)
+
+st.session_state.chart_size = min(screen_detector(key="screen_size") + 30, 650)
 
 if name1 and city1:
     data1, data2 = data_obj(name1, city1, name2, city2)

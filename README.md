@@ -53,10 +53,13 @@ streamlit run main.py
     - [ ] custom theme colors
 - [ ] AI chart interpretation
 - [ ] chat with AI
-- [ ] print chart and stats in PDF
+- [x] print chart and stats in PDF
 - [ ] save charts in browser local storage
 - [ ] import / export charts info and settings
 - [ ] i18n
+- [ ] custom components
+    - [ ] settings dialog
+    - [ ] screen size detection -> auto chart size
 
 [streamlit]: https://streamlit.io
 [natal]: https://github.com/hoishing/natal
