@@ -1,4 +1,4 @@
-Projects requirements
+# Projects requirements
 
 - use python 3.12 or above
 - each function should be type hinted
@@ -11,11 +11,12 @@ Projects requirements
 - when writing docstrings, follow these guidelines:
     - use Google style docstrings
     - don't write type hints in docstrings
-    - put the short description on the same line as the `"""`, like this:
+    - refer to the following example:
 
     ```python
     def my_function(a: int) -> int: ...
-        """Short description.
+        """
+        Short description.
 
         Args:
             Some description.

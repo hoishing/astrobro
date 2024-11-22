@@ -108,3 +108,9 @@ footer,
 .stMainBlockContainer {
   padding-top: 4rem;
 }
+
+.st-key-screen_size {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

@@ -71,7 +71,7 @@ def general_opt():
     c1, c2 = st.columns(2)
     c1.selectbox("House System", HouseSys._member_names_, key="house_sys")
     c2.selectbox("Chart Theme", ThemeType.__args__, key="theme_type")
-    st.slider("Chart Size", 300, 1200, 600, 50, key="chart_size")
+    # st.slider("Chart Size", 300, 1200, 600, 50, key="chart_size")
 
 
 def orb_opt():
