@@ -24,8 +24,8 @@ def data_form(id: int):
     sess[f"date{id}"] = sess.get(f"date{id}") or (
         Date(2000, 1, 1) if id == 1 else now.date()
     )
-    sess[f"hr{id}"] = sess.get(f"hr{id}") or (13 if id == 1 else now.hour)
-    sess[f"min{id}"] = sess.get(f"min{id}") or (0 if id == 1 else now.minute)
+    sess[f"hr{id}"] = sess.get(f"hr{id}", 13 if id == 1 else now.hour)
+    sess[f"min{id}"] = sess.get(f"min{id}", 0 if id == 1 else now.minute)
     c1, c2, c3 = st.columns(3)
     c1.date_input(
         "Date",
