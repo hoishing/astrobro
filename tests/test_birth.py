@@ -29,7 +29,7 @@ def test_default_date(birth: AppTest):
 
 
 def test_default_city(birth: AppTest):
-    assert birth.selectbox(key="city1").value == None
+    assert birth.selectbox(key="city1").value is None
 
 
 def test_sample_data(birth: AppTest, sess: SafeSessionState):
@@ -56,7 +56,7 @@ def test_orb(birth: AppTest, sess: SafeSessionState):
 
 def test_display_entities_change(birth: AppTest, sess: SafeSessionState):
     birth.toggle(key="asc_node1").set_value(False).run()
-    assert sess.asc_node1 == False
+    assert sess.asc_node1 is False
 
 
 def test_next_button(birth: AppTest, sess: SafeSessionState):
@@ -76,6 +76,13 @@ def test_change_options(birth: AppTest):
     birth.selectbox(key="house_sys").select("Whole_Sign")
     birth.run()
     assert "00°♋00" in birth.markdown[3].value
+
+
+def test_change_time(birth: AppTest, sess: SafeSessionState):
+    birth.selectbox(key="hr1").set_value(0).run()
+    assert sess["hr1"] == 0
+    birth.selectbox(key="min1").set_value(0).run()
+    assert sess["min1"] == 0
 
 
 def test_import(birth: AppTest, sess: SafeSessionState, data1_sample: str):
