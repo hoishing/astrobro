@@ -1,5 +1,6 @@
 import streamlit as st
 from const import LOGO, PAGE_CONFIG, STYLE
+from st_screen_detector import screen_detector
 from ui import (
     chart_ui,
     data_form,
@@ -11,7 +12,6 @@ from ui import (
     stats_ui,
     stepper,
 )
-from st_screen_detector import screen_detector
 
 st.set_page_config(**PAGE_CONFIG)
 st.logo(LOGO)

@@ -1,6 +1,7 @@
+import pandas as pd
 import streamlit as st
 from archive import archive_str, get_dt, import_data
-from const import BODIES, CITY_ASCII
+from const import BODIES
 from datetime import date as Date
 from datetime import datetime, timedelta
 from io import BytesIO
@@ -14,12 +15,19 @@ from typing import Literal
 sess = st.session_state
 
 
+@st.cache_resource
+def load_data() -> pd.DataFrame:
+    return Data.get_cities()
+
+
 def data_form(id: int):
     sess[f"name{id}"] = sess.get(f"name{id}", "" if id == 1 else "transit")
     sess[f"city{id}"] = sess.get(f"city{id}", None)
     c1, c2 = st.columns(2)
     name = c1.text_input("Name", key=f"name{id}")
-    city = c2.selectbox("City", CITY_ASCII, key=f"city{id}", help="type to sarch")
+    city = c2.selectbox(
+        "City", load_data().iloc[:, 0], key=f"city{id}", help="type to sarch"
+    )
     now = datetime.now()
     sess[f"date{id}"] = sess.get(f"date{id}") or (
         Date(2000, 1, 1) if id == 1 else now.date()

@@ -75,7 +75,7 @@ def test_stats_ui(birth: AppTest, sess: SafeSessionState):
 def test_change_options(birth: AppTest):
     birth.selectbox(key="house_sys").select("Whole_Sign")
     birth.run()
-    assert "00°♋00" in birth.markdown[3].value
+    assert "00° ♋ 00" in birth.markdown[3].value
 
 
 def test_change_time(birth: AppTest, sess: SafeSessionState):
@@ -90,3 +90,9 @@ def test_import(birth: AppTest, sess: SafeSessionState, data1_sample: str):
     birth.run()
     assert json.loads(archive_str(sess)) == json.loads(data1_sample)
     assert sess.conjunction == 7
+
+
+def test_chinese_location(birth: AppTest, sess: SafeSessionState):
+    birth.selectbox(key="city1").set_value("台北")
+    birth.run()
+    assert sess.city1 == "台北"

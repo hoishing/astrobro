@@ -18,7 +18,8 @@ def data1_sample():
                 "opposition": 6,
                 "trine": 6,
                 "square": 6,
-                "sextile": 5
+                "sextile": 5,
+                "quincunx": 0
             },
             "display1": {
                 "sun": true,
@@ -85,7 +86,8 @@ def transit_sample():
                 "opposition": 2,
                 "trine": 2,
                 "square": 2,
-                "sextile": 1
+                "sextile": 1,
+                "quincunx": 0
             },
             "display1": {
                 "sun": true,
