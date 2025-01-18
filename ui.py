@@ -1,15 +1,16 @@
 import streamlit as st
-from archive import archive_str, get_dt, import_data
-from const import BODIES, CITY_ASCII
+from archive import archive_str, import_data
+from const import BODIES
 from datetime import date as Date
 from datetime import datetime, timedelta
 from io import BytesIO
 from natal import Chart, Data, HouseSys, Stats
 from natal.config import Config, Display, Orb, ThemeType
 from natal.const import ASPECT_NAMES
-from natal.report import Report
+from natal_report import Report
 from streamlit_shortcuts import button
 from typing import Literal
+from utils import get_cities, get_dt, utc_of
 
 sess = st.session_state
 
@@ -19,7 +20,9 @@ def data_form(id: int):
     sess[f"city{id}"] = sess.get(f"city{id}", None)
     c1, c2 = st.columns(2)
     name = c1.text_input("Name", key=f"name{id}")
-    city = c2.selectbox("City", CITY_ASCII, key=f"city{id}", help="type to sarch")
+    city = c2.selectbox(
+        "City", get_cities().index, key=f"city{id}", help="type to sarch"
+    )
     now = datetime.now()
     sess[f"date{id}"] = sess.get(f"date{id}") or (
         Date(2000, 1, 1) if id == 1 else now.date()
@@ -232,14 +235,19 @@ def data_obj(
     name2: str = None,
     city2: str = None,
 ):
+    def get_params(id: int, city: str) -> dict:
+        city_info = get_cities().loc[city]
+        lat_lon = city_info[["lat", "lon"]].to_dict()
+        lat_lon["utc_dt"] = utc_of(get_dt(id), city_info["timezone"])
+        return lat_lon
+
     house_sys = HouseSys[sess["house_sys"]]
     orb = sess.orb
     display1 = {body: sess[f"{body}1"] for body in BODIES}
 
     data1 = Data(
         name=name1,
-        city=city1,
-        dt=get_dt(1),
+        **get_params(1, city1),
         config=Config(
             house_sys=house_sys, theme_type=sess.theme_type, orb=orb, display=display1
         ),
@@ -250,8 +258,7 @@ def data_obj(
         orb2 = Orb(**{aspect: 0 for aspect in ASPECT_NAMES})
         data2 = Data(
             name=name2,
-            city=city2,
-            dt=get_dt(2),
+            **get_params(2, city2),
             config=Config(house_sys=house_sys, orb=orb2, display=display2),
         )
     else:

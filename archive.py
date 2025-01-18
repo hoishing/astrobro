@@ -4,6 +4,7 @@ from io import BytesIO
 from natal.config import Display, Orb
 from pydantic import BaseModel
 from streamlit.runtime.state.safe_session_state import SafeSessionState
+from utils import get_dt
 
 
 class DataArchive(BaseModel):
@@ -57,10 +58,3 @@ def import_data(fp: BytesIO | None, sess: SafeSessionState = st.session_state):
     sess.display1 = data.display1
     sess.display2 = data.display2
     sess.orb = data.orb
-
-
-def get_dt(id: int, sess: SafeSessionState = st.session_state) -> datetime:
-    date = sess[f"date{id}"]
-    hr = sess[f"hr{id}"]
-    minute = sess[f"min{id}"]
-    return datetime(date.year, date.month, date.day, hr, minute)

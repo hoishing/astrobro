@@ -37,10 +37,10 @@ def test_sample_data(birth: AppTest, sess: SafeSessionState):
     birth.date_input(key="date1").set_value(date(1976, 4, 20))
     birth.selectbox(key="hr1").set_value(18)
     birth.selectbox(key="min1").set_value(58)
-    birth.selectbox(key="city1").set_value("Hong Kong")
+    birth.selectbox(key="city1").set_value("Hong Kong - HK")
     birth.run()
     assert sess["name1"] == "sample"
-    assert sess["city1"] == "Hong Kong"
+    assert sess["city1"] == "Hong Kong - HK"
     assert sess["date1"] == date(1976, 4, 20)
 
 
@@ -62,7 +62,7 @@ def test_display_entities_change(birth: AppTest, sess: SafeSessionState):
 def test_next_button(birth: AppTest, sess: SafeSessionState):
     birth.button(key="next").click().run()
     assert sess["name1"] == "sample"
-    assert sess["city1"] == "Hong Kong"
+    assert sess["city1"] == "Hong Kong - HK"
     assert sess["date1"] == date(1976, 4, 21)
 
 
@@ -75,7 +75,7 @@ def test_stats_ui(birth: AppTest, sess: SafeSessionState):
 def test_change_options(birth: AppTest):
     birth.selectbox(key="house_sys").select("Whole_Sign")
     birth.run()
-    assert "00°♋00" in birth.markdown[3].value
+    assert "00° ♋ 00" in birth.markdown[3].value
 
 
 def test_change_time(birth: AppTest, sess: SafeSessionState):

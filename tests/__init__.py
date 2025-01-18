@@ -6,7 +6,7 @@ def data1_sample():
     return """
         {
             "name1": "sample",
-            "city1": "Hong Kong",
+            "city1": "Hong Kong - HK",
             "dt1": "1976-04-20T18:58:00",
             "name2": "transit",
             "city2": null,
@@ -18,7 +18,8 @@ def data1_sample():
                 "opposition": 6,
                 "trine": 6,
                 "square": 6,
-                "sextile": 5
+                "sextile": 5,
+                "quincunx": 0
             },
             "display1": {
                 "sun": true,
@@ -73,10 +74,10 @@ def transit_sample():
     return """
         {
             "name1": "sample",
-            "city1": "Hong Kong",
+            "city1": "Hong Kong - HK",
             "dt1": "1976-04-20T18:58:00",
             "name2": "transit",
-            "city2": "Taipei",
+            "city2": "Taipei - TW",
             "dt2": "2014-04-20T18:48:00",
             "house_sys": "Placidus",
             "theme_type": "dark",
@@ -85,7 +86,8 @@ def transit_sample():
                 "opposition": 2,
                 "trine": 2,
                 "square": 2,
-                "sextile": 1
+                "sextile": 1,
+                "quincunx": 0
             },
             "display1": {
                 "sun": true,

@@ -1,6 +1,3 @@
-"""constants"""
-
-from natal import Data
 from natal.config import Display
 from pathlib import Path
 
@@ -21,8 +18,7 @@ PAGE_CONFIG = dict(
     },
 )
 
-CITY_ASCII = Data.cities.iloc[:, 0]
 BODIES = list(Display().model_fields.keys())
-STYLE = f"<style>{Path("style.css").read_text()}</style>"
+STYLE = f"<style>{Path('style.css').read_text()}</style>"
 LOGO = "static/astrobro-logo.png"
 CHART_SIZE = 650
