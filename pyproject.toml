@@ -9,5 +9,6 @@ dependencies = ["natal[report]>=0.9.3", "streamlit-shortcuts"]
 [dependency-groups]
 dev = ["ipykernel>=6.29.5", "pytest>=8.3.4", "watchdog>=6.0.0"]
 
-[tool.ruff.lint.isort]
-no-sections = true
+[tool.ruff]
+isort.no-sections = true
+extend-ignore = ["E203", "E402", "E501", "F401", "F811"]
