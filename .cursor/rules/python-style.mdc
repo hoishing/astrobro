@@ -1,0 +1,21 @@
+---
+globs: **/*.py
+alwaysApply: false
+---
+# Python Style
+
+- Use Python 3.12 or above
+- All functions must be type hinted
+- Use `pathlib.Path` instead of `os.path` for path operations
+- Use latest type hints syntax:
+    - `list[int]` instead of `List[int]`
+    - `dict[str, int]` instead of `Dict[str, int]`
+    - `tuple[int, ...]` instead of `Tuple[int, ...]`
+    - `A | B` instead of `Union[A, B]`
+    - Use `typing.Self` instead of forward reference string "ClassName"
+- Remove unused imports
+
+# Docstring Style
+
+- Always use a single-line, concise docstring
+- DO NOT include params or type hints in docstrings

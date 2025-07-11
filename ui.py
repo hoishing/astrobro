@@ -21,7 +21,7 @@ def data_form(id: int):
     c1, c2 = st.columns(2)
     name = c1.text_input("Name", key=f"name{id}")
     city = c2.selectbox(
-        "City", get_cities().index, key=f"city{id}", help="type to sarch"
+        "City", get_cities().index, key=f"city{id}", help="type to search"
     )
     now = datetime.now()
     sess[f"date{id}"] = sess.get(f"date{id}") or (
