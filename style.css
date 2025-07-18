@@ -92,21 +92,10 @@ footer,
 }
 
 .st-key-chart_svg {
-  > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: min-content;
-  }
-
   .stMarkdown {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    [data-testid="stMarkdownContainer"] {
-      position: relative;
-    }
   }
 }
 
@@ -114,8 +103,8 @@ footer,
   padding-top: 4rem;
 }
 
-.st-key-screen_size {
-  position: absolute;
-  top: 0;
-  right: 0;
+
+.st-key-prev + .stElementContainer,
+.st-key-next + .stElementContainer {
+  display: none;
 }

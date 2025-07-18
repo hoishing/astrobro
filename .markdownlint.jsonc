@@ -1,0 +1,19 @@
+{
+  //   claude code specific
+  "MD013": false,
+  "MD022": false,
+  "MD031": false,
+  "MD032": false,
+  "MD047": false,
+  //   general
+  "MD007": {
+    "indent": 4
+  },
+  "MD025": false,
+  "MD029": false,
+  "MD033": false,
+  "MD034": false,
+  "MD036": false,
+  "MD041": false,
+  "MD045": false
+}

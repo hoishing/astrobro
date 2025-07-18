@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "natal",
-    "natal-report",
     "st-screenwidth-detector",
     "streamlit",
     "streamlit-shortcuts",
@@ -17,4 +16,4 @@ isort.no-sections = true
 extend-ignore = ["E203", "E402", "E501", "E712", "F401", "F811"]
 
 [dependency-groups]
-dev = ["ipykernel", "watchdog"]
+dev = ["ipykernel", "ruff", "watchdog"]

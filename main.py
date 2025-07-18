@@ -35,7 +35,7 @@ with st.expander("Birth Data", expanded=True):
 with st.expander("Transit / Synastry"):
     name2, city2 = data_form(2)
 
-st.session_state.chart_size = min(screenwidth_detector() + 30, 650)
+st.session_state.chart_size = min(screenwidth_detector() + 20, 650)
 
 if name1 and city1:
     data1, data2 = data_obj(name1, city1, name2, city2)

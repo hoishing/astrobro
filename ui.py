@@ -7,8 +7,9 @@ from io import BytesIO
 from natal import Chart, Data, HouseSys, Stats
 from natal.config import Config, Display, Orb, ThemeType
 from natal.const import ASPECT_NAMES
-from natal_report import Report
-from streamlit_shortcuts import button
+
+# from natal_report import Report
+from streamlit_shortcuts import shortcut_button
 from typing import Literal
 from utils import get_cities, get_dt, utc_of
 
@@ -55,20 +56,20 @@ def data_form(id: int):
 def general_opt():
     c1, c2 = st.columns(2)
     c1.toggle("Show Statistics", key="show_stats")
-    with c2:
-        filename, name1, city1, *_ = input_status()
-        ready = name1 and city1
-        with st.empty():
-            if st.button("Generate PDF", use_container_width=True, disabled=not ready):
-                with st.spinner("generating..."):
-                    pdf = pdf_report()
-                st.download_button(
-                    ":material/download: Download",
-                    pdf,
-                    file_name=f"{filename}_report.pdf",
-                    mime="application/pdf",
-                    use_container_width=True,
-                )
+    # with c2:
+    #     filename, name1, city1, *_ = input_status()
+    #     ready = name1 and city1
+    #     with st.empty():
+    #         if st.button("Generate PDF", use_container_width=True, disabled=not ready):
+    #             with st.spinner("generating..."):
+    #                 pdf = pdf_report()
+    #             st.download_button(
+    #                 ":material/download: Download",
+    #                 pdf,
+    #                 file_name=f"{filename}_report.pdf",
+    #                 mime="application/pdf",
+    #                 use_container_width=True,
+    #             )
     sess["house_sys"] = sess.get("house_sys", "Placidus")
     sess["theme_type"] = sess.get("theme_type", "dark")
     c1, c2 = st.columns(2)
@@ -171,7 +172,8 @@ def save_load_ui():
 
 def stepper(id: int):
     with st.container(key="stepper"):
-        c1, c2, c3 = st.columns([3, 4, 3], vertical_alignment="bottom")
+        st.write("")
+        c1, c2, c3 = st.columns([3, 4, 3])
         with c2:
             unit = st.selectbox(
                 "date adjustment",
@@ -180,9 +182,23 @@ def stepper(id: int):
                 label_visibility="collapsed",
             )
         with c1:
-            button("❮", "alt+arrowleft", on_click=step, args=(id, unit, -1), key="prev")
+            shortcut_button(
+                "❮",
+                "alt+arrowleft",
+                hint=False,
+                on_click=step,
+                args=(id, unit, -1),
+                key="prev",
+            )
         with c3:
-            button("❯", "alt+arrowright", on_click=step, args=(id, unit, 1), key="next")
+            shortcut_button(
+                "❯",
+                "alt+arrowright",
+                hint=False,
+                on_click=step,
+                args=(id, unit, 1),
+                key="next",
+            )
 
 
 def chart_ui(data1: Data, data2: Data = None):
@@ -291,8 +307,9 @@ def pdf_report() -> BytesIO | str:
     _, name1, city1, name2, city2 = input_status()
     if name1 and city1:
         data1, data2 = data_obj(name1, city1, name2, city2)
-        report = Report(data1, data2)
-        return report.create_pdf(report.full_report)
+        # report = Report(data1, data2)
+        # return report.create_pdf(report.full_report)
+        return ""
     else:
         return ""
 
