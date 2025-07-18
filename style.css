@@ -103,6 +103,9 @@ footer,
   padding-top: 4rem;
 }
 
+.stMainBlockContainer {
+  overflow-x: hidden;
+}
 
 .st-key-prev + .stElementContainer,
 .st-key-next + .stElementContainer {
