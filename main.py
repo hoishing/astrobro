@@ -1,4 +1,5 @@
 import streamlit as st
+import ui
 from const import LOGO, PAGE_CONFIG, STYLE
 from st_screenwidth_detector import screenwidth_detector
 from ui import (

@@ -1,21 +1,23 @@
+import pandas as pd
 import streamlit as st
-from archive import archive_str, import_data
+from archive import archive_obj
 from const import BODIES
 from datetime import date as Date
 from datetime import datetime, timedelta
-from io import BytesIO
 from natal import Chart, Data, HouseSys, Stats
 from natal.config import Config, Display, Orb, ThemeType
 from natal.const import ASPECT_NAMES
-import pandas as pd
-import json
-
-# from natal_report import Report
+from streamlit_local_storage import LocalStorage
 from streamlit_shortcuts import shortcut_button
 from typing import Literal
-from utils import get_cities, get_dt, utc_of
+from utils import charts_data, get_cities, get_dt, utc_of
 
+# constants ===============================================
 sess = st.session_state
+local_storage = LocalStorage()
+sess.setdefault("all_charts", local_storage.getItem("all_charts") or [])
+
+# ui ======================================================
 
 
 def data_form(id: int):
@@ -152,67 +154,30 @@ def display_opt(num: int):
     )
 
 
+def saved_charts_ui():
+    """Display saved charts from localStorage with `st.data_editor`."""
+    st.subheader("Saved Charts")
+
+    # Check if localStorage is available
+    if not sess.all_charts:
+        st.info("localStorage not available. Save a chart first to initialize.")
+        return
+
+    df = pd.DataFrame(charts_data(sess.all_charts))
+    display_names = ["Name 1", "City 1", "Date 1", "Name 2", "City 2", "Date 2"]
+    df.columns = display_names + list(df.columns[len(display_names) :])
+
+    # Display the dataframe with the requested columns
+    st.data_editor(df, use_container_width=True, hide_index=True, num_rows="dynamic")
+
+
 def save_load_ui():
-    filename, name1, city1, *_ = input_status()
+    name1, city1, *_ = input_states()
     data1_ready = name1 and city1
+    if "all_charts" not in sess:
+        sess["all_charts"] = local_storage.getItem("all_charts") or dict()
 
-    # JavaScript functions for localStorage operations
-    localStorage_js = """
-    <script>
-    function saveChartData(data, key) {
-        localStorage.setItem('astrobro_' + key, data);
-        return true;
-    }
-    
-    function loadChartData(key) {
-        return localStorage.getItem('astrobro_' + key);
-    }
-    
-    function getAllChartKeys() {
-        const keys = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith('astrobro_')) {
-                keys.push(key.substring(9)); // Remove 'astrobro_' prefix
-            }
-        }
-        return keys;
-    }
-    
-    function deleteChartData(key) {
-        localStorage.removeItem('astrobro_' + key);
-        return true;
-    }
-    
-    function getAllChartData() {
-        const charts = [];
-        const keys = getAllChartKeys();
-        keys.forEach(key => {
-            try {
-                const data = JSON.parse(localStorage.getItem('astrobro_' + key));
-                if (data) {
-                    charts.push({
-                        key: key,
-                        name1: data.name1 || '',
-                        city1: data.city1 || '',
-                        dt1: data.dt1 || '',
-                        name2: data.name2 || '',
-                        city2: data.city2 || '',
-                        dt2: data.dt2 || ''
-                    });
-                }
-            } catch (e) {
-                console.error('Error parsing chart data for key:', key, e);
-            }
-        });
-        return charts;
-    }
-    </script>
-    """
-
-    st.markdown(localStorage_js, unsafe_allow_html=True)
-
-    with st.expander("save / load data"):
+    with st.expander("saved charts", expanded=True):
         # Save to localStorage button
         if st.button(
             "save chart data",
@@ -220,56 +185,14 @@ def save_load_ui():
             key="save_button",
             disabled=not data1_ready,
         ):
-            if data1_ready:
-                chart_data = archive_str()
-                save_key = filename
-
-                # Add to session state demo charts for immediate display
-                if "demo_charts" not in sess:
-                    sess.demo_charts = []
-
-                # Remove existing chart with same key
-                sess.demo_charts = [
-                    chart for chart in sess.demo_charts if chart["key"] != save_key
-                ]
-
-                # Add new chart
-                sess.demo_charts.append({"key": save_key, "data": chart_data})
-
-                # Escape the JSON data for JavaScript localStorage
-                escaped_data = (
-                    chart_data.replace("'", "\\'")
-                    .replace("\n", "\\n")
-                    .replace("\r", "\\r")
-                )
-                # Use JavaScript to save to localStorage
-                st.markdown(
-                    f"""
-                <script>
-                try {{
-                    if (saveChartData('{escaped_data}', '{save_key}')) {{
-                        console.log('Chart data saved to localStorage successfully!');
-                    }} else {{
-                        console.log('Failed to save chart data to localStorage');
-                    }}
-                }} catch (e) {{
-                    console.error('Error saving chart data to localStorage:', e);
-                }}
-                </script>
-                """,
-                    unsafe_allow_html=True,
-                )
-                st.success(f"Chart saved as '{save_key}'!")
-                st.rerun()
-
-        st.file_uploader(
-            "load chart data",
-            key="load_file",
-            on_change=lambda: import_data(sess.load_file),
-        )
+            archive = archive_obj()
+            json_str = archive.model_dump_json()
+            sess.all_charts[hash(json_str)] = json_str
+            local_storage.setItem("all_charts", sess.all_charts)
+            st.success("Chart saved!")
 
         # Display saved charts
-        show_saved_charts()
+        saved_charts_ui()
 
 
 def stepper(id: int):
@@ -405,113 +328,23 @@ def set_displays(num: int, opt: Literal["inner", "planets", "default"]):
     sess[f"display{num}"] = Display(**display)
 
 
-def pdf_report() -> BytesIO | str:
-    _, name1, city1, name2, city2 = input_status()
-    if name1 and city1:
-        data1, data2 = data_obj(name1, city1, name2, city2)
-        # report = Report(data1, data2)
-        # return report.create_pdf(report.full_report)
-        return ""
-    else:
-        return ""
+# def pdf_report() -> BytesIO | str:
+#     name1, city1, name2, city2 = input_states()
+#     if name1 and city1:
+#         data1, data2 = data_obj(name1, city1, name2, city2)
+#         # report = Report(data1, data2)
+#         # return report.create_pdf(report.full_report)
+#         return ""
+#     else:
+#         return ""
 
 
-def input_status() -> tuple[str, bool, bool, str, str, str, str]:
+def input_states() -> tuple[str, str, str, str]:
     name1 = sess.get("name1")
     city1 = sess.get("city1")
     name2 = sess.get("name2")
     city2 = sess.get("city2")
-    filename = f"{name1}_{name2}" if (name2 and city2) else name1
-    return filename, name1, city1, name2, city2
-
-
-def show_saved_charts():
-    """Display saved charts from localStorage with load and delete functionality."""
-    st.subheader("Saved Charts")
-
-    # Initialize saved charts in session state
-    if "saved_charts_keys" not in sess:
-        sess.saved_charts_keys = []
-
-    # Manual management for demo purposes - in practice this would get data from localStorage
-    # For now, create a simple interface to simulate saved charts
-
-    # Simulate some saved chart data for display
-    if sess.get("demo_charts"):
-        chart_data = sess.demo_charts
-    else:
-        # Initialize with sample data
-        chart_data = []
-
-    if chart_data:
-        # Convert to DataFrame for display
-        display_data = []
-        for i, chart in enumerate(chart_data):
-            try:
-                from archive import DataArchive
-
-                data = DataArchive.model_validate_json(chart["data"])
-                display_data.append(
-                    {
-                        "Name 1": data.name1,
-                        "City 1": data.city1 or "",
-                        "Date 1": data.dt1.strftime("%Y-%m-%d %H:%M"),
-                        "Name 2": data.name2,
-                        "City 2": data.city2 or "",
-                        "Date 2": data.dt2.strftime("%Y-%m-%d %H:%M")
-                        if data.dt2
-                        else "",
-                        "Chart Key": chart["key"],
-                    }
-                )
-            except Exception as e:
-                st.error(f"Error parsing chart {i}: {e}")
-                continue
-
-        if display_data:
-            df = pd.DataFrame(display_data)
-
-            # Display the dataframe with the requested columns
-            st.dataframe(
-                df[["Name 1", "City 1", "Date 1", "Name 2", "City 2", "Date 2"]],
-                use_container_width=True,
-                hide_index=True,
-            )
-
-            # Add load and delete buttons for each chart
-            st.write("**Actions:**")
-            for i, chart in enumerate(chart_data):
-                col1, col2, col3 = st.columns([2, 1, 1])
-
-                with col1:
-                    st.write(f"**{chart['key']}**")
-
-                with col2:
-                    if st.button(f"Load", key=f"load_{i}"):
-                        load_chart_from_json_data(chart["data"])
-
-                with col3:
-                    if st.button(f"Delete", key=f"delete_{i}"):
-                        delete_saved_chart(i)
-        else:
-            st.info("No valid saved charts found.")
-    else:
-        st.info("No saved charts found. Save a chart to see it here.")
-
-    # Add JavaScript that actually saves to localStorage for browser persistence
-    localStorage_sync_js = """
-    <script>
-    // Sync with actual localStorage when available
-    function syncWithLocalStorage() {
-        const charts = getAllChartData();
-        console.log('Found charts in localStorage:', charts.length);
-    }
-    
-    // Run on page load
-    document.addEventListener('DOMContentLoaded', syncWithLocalStorage);
-    </script>
-    """
-    st.markdown(localStorage_sync_js, unsafe_allow_html=True)
+    return name1, city1, name2, city2
 
 
 def load_chart_from_json_data(json_str: str):
@@ -543,29 +376,22 @@ def load_chart_from_json_data(json_str: str):
         st.error(f"Failed to load chart: {e}")
 
 
-def delete_saved_chart(chart_index: int):
-    """Delete chart from saved charts list."""
+def delete_saved_chart_simple(chart_key: str):
+    """Delete chart from localStorage using simple approach."""
     try:
-        if "demo_charts" in sess and chart_index < len(sess.demo_charts):
-            chart_key = sess.demo_charts[chart_index]["key"]
-            del sess.demo_charts[chart_index]
+        if sess.get("localStorage"):
+            # For streamlit-local-storage, we need to check what delete method is available
+            # Let's try to set the item to None/empty to "delete" it
+            sess.localStorage.setItem(chart_key, "")
 
-            # Also delete from localStorage via JavaScript
-            delete_js = f"""
-            <script>
-            try {{
-                if (deleteChartData('{chart_key}')) {{
-                    console.log('Chart deleted from localStorage successfully!');
-                }} else {{
-                    console.log('Failed to delete chart from localStorage');
-                }}
-            }} catch (e) {{
-                console.error('Error deleting chart from localStorage:', e);
-            }}
-            </script>
-            """
-            st.markdown(delete_js, unsafe_allow_html=True)
-            st.success(f"Chart '{chart_key}' deleted!")
+            # Remove from tracked keys
+            if "saved_chart_keys" in sess:
+                sess.saved_chart_keys.discard(chart_key)
+
+            chart_display_name = chart_key.replace("astrobro_", "")
+            st.success(f"Chart '{chart_display_name}' deleted!")
             st.rerun()
+        else:
+            st.error("localStorage not available")
     except Exception as e:
         st.error(f"Failed to delete chart: {e}")

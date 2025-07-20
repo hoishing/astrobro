@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 import streamlit as st
 from datetime import datetime
@@ -42,3 +43,7 @@ def get_dt(id: int, sess: SafeSessionState = st.session_state) -> datetime:
     minute = sess[f"min{id}"]
     return datetime(date.year, date.month, date.day, hr, minute)
 
+
+@st.cache_data(show_spinner=False)
+def charts_data(charts: dict) -> list[dict]:
+    return [json.loads(chart) for chart in charts.values()]
