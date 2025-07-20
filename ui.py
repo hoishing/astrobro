@@ -163,12 +163,21 @@ def saved_charts_ui():
         st.info("localStorage not available. Save a chart first to initialize.")
         return
 
-    df = pd.DataFrame(charts_data(sess.all_charts))
-    display_names = ["Name 1", "City 1", "Date 1", "Name 2", "City 2", "Date 2"]
-    df.columns = display_names + list(df.columns[len(display_names) :])
-
-    # Display the dataframe with the requested columns
-    st.data_editor(df, use_container_width=True, hide_index=True, num_rows="dynamic")
+    df = charts_data(sess.all_charts)
+    date_col_config = st.column_config.DatetimeColumn(
+        format="YYYY-MM-DD HH:mm", step=60
+    )
+    st.data_editor(
+        df,
+        use_container_width=True,
+        hide_index=True,
+        # hide columns not in display_names
+        column_order=df.columns[:6],
+        column_config={
+            "Date 1": date_col_config,
+            "Date 2": date_col_config,
+        },
+    )
 
 
 def save_load_ui():
@@ -189,7 +198,6 @@ def save_load_ui():
             json_str = archive.model_dump_json()
             sess.all_charts[hash(json_str)] = json_str
             local_storage.setItem("all_charts", sess.all_charts)
-            st.success("Chart saved!")
 
         # Display saved charts
         saved_charts_ui()

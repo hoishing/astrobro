@@ -46,4 +46,11 @@ def get_dt(id: int, sess: SafeSessionState = st.session_state) -> datetime:
 
 @st.cache_data(show_spinner=False)
 def charts_data(charts: dict) -> list[dict]:
-    return [json.loads(chart) for chart in charts.values()]
+    data = [json.loads(chart) for chart in charts.values()]
+    display_names = ["Name 1", "City 1", "Date 1", "Name 2", "City 2", "Date 2"]
+    df = pd.DataFrame(data)
+    df.columns = display_names + list(df.columns[len(display_names) :])
+    df.index = charts.keys()
+    df["Date 1"] = pd.to_datetime(df["Date 1"])
+    df["Date 2"] = pd.to_datetime(df["Date 2"])
+    return df
