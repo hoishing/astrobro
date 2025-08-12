@@ -17,9 +17,4 @@ isort.no-sections = true
 extend-ignore = ["E203", "E402", "E501", "E712", "F401", "F811"]
 
 [dependency-groups]
-dev = [
-    "ipykernel",
- "pytest>=8.4.1",
- "ruff",
- "watchdog",
-]
+dev = ["ipykernel", "pytest", "ruff", "watchdog"]
